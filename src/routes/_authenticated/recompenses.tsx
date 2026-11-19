@@ -38,7 +38,7 @@ function RewardsPage() {
     <div className="mx-auto max-w-5xl space-y-6">
       <h1 className="text-3xl font-bold">Récompenses</h1>
       {!me?.isManager && mine && <div className="rounded-3xl bg-star/30 p-5 text-2xl font-extrabold text-star-foreground">⭐ {mine.points} points</div>}
-      <section className="rounded-3xl bg-card p-5 shadow-soft">
+      <section className="card-modern p-5">
         <h2 className="mb-3 text-lg font-bold">🎁 Catalogue</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {rewards.map((r) => (
@@ -59,12 +59,12 @@ function RewardsPage() {
           </div>
         )}
       </section>
-      <section className="rounded-3xl bg-card p-5 shadow-soft">
+      <section className="card-modern p-5">
         <h2 className="mb-3 text-lg font-bold">📜 {me?.isManager ? "Demandes & historique" : "Mon historique"}</h2>
         {!claims.length && <p className="text-sm text-muted-foreground">Aucune demande.</p>}
         <div className="space-y-2">
           {claims.map((c) => (
-            <div key={c.id} className="flex items-center gap-3 rounded-2xl bg-muted p-3">
+            <div key={c.id} className="flex items-center gap-3 tile p-3">
               {byId[c.member_id] && <Avatar m={byId[c.member_id]} size={30} />}
               <span className="flex-1 font-semibold">{rById[c.reward_id]?.icon} {rById[c.reward_id]?.title} <span className="text-xs text-muted-foreground">· {fmtDate(c.created_at)}</span></span>
               {c.status === "demandee" && me?.isManager ? (

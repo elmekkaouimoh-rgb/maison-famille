@@ -63,7 +63,7 @@ function CalendarPage() {
       </div>
 
       {view === "mois" && (
-        <div className="rounded-3xl bg-card p-3 shadow-soft">
+        <div className="card-modern p-3">
           <div className="grid grid-cols-7 text-center text-xs font-bold text-muted-foreground">
             {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => <div key={d} className="py-2">{d}</div>)}
           </div>
@@ -73,7 +73,7 @@ function CalendarPage() {
               const who = [...new Set(evs.flatMap((e) => e.member_ids))];
               return (
                 <button key={d.toISOString()} onClick={() => setSelected(d)} className={cn("flex min-h-20 flex-col items-center gap-1 rounded-2xl p-1.5 transition hover:bg-muted", !isSameMonth(d, cursor) && "opacity-40", isSameDay(d, selected) && "bg-secondary ring-2 ring-primary")}>
-                  <span className={cn("flex size-7 items-center justify-center rounded-full text-sm font-bold", isSameDay(d, new Date()) && "bg-primary text-primary-foreground")}>{format(d, "d")}</span>
+                  <span className={cn("flex size-9 items-center justify-center rounded-full bg-card text-sm font-bold shadow-sm transition", isSameDay(d, new Date()) && "bg-foreground text-background")}>{format(d, "d")}</span>
                   <div className="flex flex-wrap justify-center -space-x-1.5">
                     {who.slice(0, 4).map((id) => byId[id] && <Avatar key={id} m={byId[id]} size={20} />)}
                   </div>
@@ -88,7 +88,7 @@ function CalendarPage() {
       {view === "semaine" && (
         <div className="grid gap-3 md:grid-cols-7">
           {days.map((d) => (
-            <div key={d.toISOString()} className={cn("rounded-3xl bg-card p-3 shadow-soft", isSameDay(d, new Date()) && "ring-2 ring-primary")}>
+            <div key={d.toISOString()} className={cn("card-modern p-3", isSameDay(d, new Date()) && "ring-2 ring-primary")}>
               <div className="mb-2 text-sm font-bold capitalize">{format(d, "EEE dd/MM", { locale: fr })}</div>
               <div className="space-y-2">{occ.filter((e) => isSameDay(e.occ, d)).map((e) => <EventCard key={e.id + e.occ.toISOString()} e={e} byId={byId} />)}</div>
             </div>
@@ -96,7 +96,7 @@ function CalendarPage() {
         </div>
       )}
 
-      <section className="rounded-3xl bg-card p-5 shadow-soft">
+      <section className="card-modern p-5">
         <h2 className="mb-3 text-lg font-bold capitalize">{format(view === "mois" ? selected : cursor, "EEEE dd/MM/yyyy", { locale: fr })}</h2>
         {view !== "semaine" && (!dayList.length ? <p className="text-sm text-muted-foreground">Aucun événement.</p> : <div className="grid gap-2 sm:grid-cols-2">{dayList.map((e) => <EventCard key={e.id + e.occ.toISOString()} e={e} byId={byId} canDelete={me?.isManager} />)}</div>)}
       </section>

@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      budgets: {
+        Row: {
+          amount: number
+          month: string
+        }
+        Insert: {
+          amount?: number
+          month: string
+        }
+        Update: {
+          amount?: number
+          month?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           all_day: boolean
@@ -49,6 +64,68 @@ export type Database = {
           notes?: string | null
           recurrence?: string
           start_at?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      health_records: {
+        Row: {
+          created_at: string
+          day: string | null
+          details: string | null
+          id: string
+          kind: string
+          member_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          day?: string | null
+          details?: string | null
+          id?: string
+          kind: string
+          member_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          day?: string | null
+          details?: string | null
+          id?: string
+          kind?: string
+          member_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_records_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meals: {
+        Row: {
+          day: string
+          id: string
+          ingredients: string[]
+          slot: string
+          title: string
+        }
+        Insert: {
+          day: string
+          id?: string
+          ingredients?: string[]
+          slot: string
+          title: string
+        }
+        Update: {
+          day?: string
+          id?: string
+          ingredients?: string[]
+          slot?: string
           title?: string
         }
         Relationships: []
@@ -241,6 +318,30 @@ export type Database = {
           },
         ]
       }
+      shopping_items: {
+        Row: {
+          category: string
+          created_at: string
+          done: boolean
+          id: string
+          name: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          done?: boolean
+          id?: string
+          name: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          done?: boolean
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           comment: string | null
@@ -287,6 +388,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "tasks_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string
+          day: string
+          id: string
+          kind: string
+          label: string
+          member_id: string | null
+        }
+        Insert: {
+          amount: number
+          category?: string
+          created_at?: string
+          day?: string
+          id?: string
+          kind?: string
+          label: string
+          member_id?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string
+          day?: string
+          id?: string
+          kind?: string
+          label?: string
+          member_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_member_id_fkey"
             columns: ["member_id"]
             isOneToOne: false
             referencedRelation: "members"

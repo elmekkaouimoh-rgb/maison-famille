@@ -77,7 +77,7 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
   const nextReward = data?.rewards.find((r) => r.cost > points) ?? data?.rewards.at(-1);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="stagger mx-auto max-w-4xl space-y-6">
       <section className="relative overflow-hidden rounded-3xl p-6 text-foreground shadow-soft" style={{ background: `color-mix(in oklab, ${member.color} 35%, var(--card))` }}>
         <div className="flex items-center gap-4">
           <span className={cn("flex items-center justify-center rounded-full bg-card", v.huge ? "size-24 text-6xl" : "size-16 text-4xl")}>{member.avatar}</span>
@@ -103,7 +103,7 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
         if (!items.length) return null;
         const done = items.filter((r) => data?.checks.some((c) => c.routine_id === r.id)).length;
         return (
-          <section key={period} className="rounded-3xl bg-card p-5 shadow-soft">
+          <section key={period} className="card-modern p-5">
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-xl font-bold">{period === "matin" ? "☀️ Routine du matin" : "🌙 Routine du soir"}</h2>
               <span className="text-sm font-bold text-muted-foreground">{done}/{items.length}</span>
@@ -118,10 +118,11 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
                     <span className={cn("font-semibold", checked && "text-muted-foreground line-through")}>{r.icon} {r.title}</span>
                   </label>
                 ) : (
-                  <button key={r.id} onClick={() => toggle.mutate(r.id)} className={cn("flex flex-col items-center gap-2 rounded-3xl border-4 p-4 transition", checked ? "border-success bg-success/15" : "border-border bg-muted")}>
-                    <span className={v.huge ? "text-6xl" : "text-4xl"}>{r.icon}</span>
-                    {!(member.interface === "toutpetit") && <span className="text-center text-sm font-bold">{r.title}</span>}
-                    <span className="text-2xl">{checked ? "⭐" : "☆"}</span>
+                  <button key={r.id} onClick={() => toggle.mutate(r.id)} className="group flex flex-col items-center transition active:scale-90">
+                    <span className={cn("star-shape flex aspect-square w-full max-w-40 items-center justify-center pt-3 transition duration-300 group-hover:scale-105", checked ? "bg-star" : "bg-star/35")}>
+                      <span key={String(checked)} className={cn("pop", v.huge ? "text-5xl" : "text-3xl")}>{checked ? "⭐" : r.icon}</span>
+                    </span>
+                    {member.interface !== "toutpetit" && <span className="mt-1 text-center text-sm font-extrabold">{r.title}</span>}
                   </button>
                 );
               })}
@@ -130,7 +131,7 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
         );
       })}
 
-      <section className="rounded-3xl bg-card p-5 shadow-soft">
+      <section className="card-modern p-5">
         <h2 className="mb-3 text-xl font-bold">{v.tasks}</h2>
         {!data?.tasks.length && <p className="text-muted-foreground">Rien pour l'instant. 🎉</p>}
         <div className={cn("grid gap-3", v.big ? "sm:grid-cols-2" : "")}>
@@ -150,12 +151,12 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
       </section>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <section className="rounded-3xl bg-card p-5 shadow-soft">
+        <section className="card-modern p-5">
           <h2 className="mb-3 text-xl font-bold">📅 Bientôt</h2>
           {!upcoming.length && <p className="text-muted-foreground">Rien de prévu.</p>}
           <ul className="space-y-2">
             {upcoming.map((e) => (
-              <li key={e.id + e.occ.toISOString()} className="flex items-center gap-3 rounded-2xl bg-muted p-3">
+              <li key={e.id + e.occ.toISOString()} className="flex items-center gap-3 tile p-3">
                 <span className="text-2xl">{EVENT_CATEGORIES[e.category]?.icon ?? "📌"}</span>
                 <div><div className="font-bold">{e.title}</div><div className="text-xs text-muted-foreground">{fmtDate(e.occ)}{!e.all_day && ` · ${fmtTime(e.occ)}`}</div></div>
               </li>
@@ -163,11 +164,11 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
           </ul>
         </section>
         {member.interface !== "toutpetit" && (
-          <section className="rounded-3xl bg-card p-5 shadow-soft">
+          <section className="card-modern p-5">
             <h2 className="mb-3 text-xl font-bold">🎁 Mes récompenses</h2>
             <ul className="space-y-2">
               {data?.rewards.map((r) => (
-                <li key={r.id} className="flex items-center gap-3 rounded-2xl bg-muted p-3">
+                <li key={r.id} className="flex items-center gap-3 tile p-3">
                   <span className="text-2xl">{r.icon}</span>
                   <span className="flex-1 font-bold">{r.title}</span>
                   <Button size="sm" variant="outline" disabled={points < r.cost || asParent} onClick={() => claim.mutate(r.id)}>⭐ {r.cost}</Button>

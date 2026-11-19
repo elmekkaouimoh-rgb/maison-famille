@@ -66,13 +66,13 @@ function PapaDashboard({ name }: { name: string }) {
   ];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <section className="bg-hero rounded-3xl p-6 shadow-soft">
+    <div className="stagger mx-auto max-w-6xl space-y-6">
+      <section className="bg-hero relative overflow-hidden rounded-[2rem] p-6 shadow-soft">
         <p className="text-sm font-semibold capitalize text-muted-foreground">{format(now, "EEEE d MMMM yyyy", { locale: fr })}</p>
-        <h1 className="text-3xl font-bold">Bonjour {name} 👋</h1>
+        <h1 className="text-4xl font-bold">Bonjour <span className="text-gradient">{name}</span> 👋</h1>
         <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
           {stats.map((s) => (
-            <div key={s.label} className="rounded-2xl bg-card p-4">
+            <div key={s.label} className="card-modern card-hover p-4">
               <div className="text-2xl">{s.icon}</div>
               <div className="text-2xl font-extrabold">{s.value}</div>
               <div className="text-xs font-semibold text-muted-foreground">{s.label}</div>
@@ -83,14 +83,14 @@ function PapaDashboard({ name }: { name: string }) {
 
       <section>
         <h2 className="mb-3 text-xl font-bold">Les enfants</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="stagger grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {kids.map((k) => {
             const r = (data?.routines ?? []).filter((x) => x.member_id === k.id).length;
             const c = (data?.checks ?? []).filter((x) => x.member_id === k.id).length;
             const t = (data?.tasks ?? []).filter((x) => x.member_id === k.id);
             const next = occ.find((e) => e.member_ids.includes(k.id));
             return (
-              <div key={k.id} className="rounded-3xl bg-card p-5 shadow-soft">
+              <div key={k.id} className="card-modern card-hover p-5">
                 <div className="flex items-center gap-3">
                   <Avatar m={k} size={52} />
                   <div className="flex-1">
@@ -122,7 +122,7 @@ function PapaDashboard({ name }: { name: string }) {
         <Panel title="✅ Tâches à valider" action={<Link to="/taches" className="text-sm font-bold text-primary">Tout voir →</Link>}>
           {!pending.length && <Empty>Rien à valider.</Empty>}
           {pending.map((t) => (
-            <div key={t.id} className="flex items-center gap-2 rounded-2xl bg-muted p-3">
+            <div key={t.id} className="flex items-center gap-2 tile p-3">
               <span className="text-xl">{t.icon}</span><span className="flex-1 font-semibold">{t.title}</span>
               {byId[t.member_id] && <Avatar m={byId[t.member_id]} size={28} />}
             </div>
@@ -133,7 +133,7 @@ function PapaDashboard({ name }: { name: string }) {
       <Panel title="🎂 Anniversaires à venir">
         <div className="grid gap-3 sm:grid-cols-3">
           {birthdays.map(({ m, next, turns }) => (
-            <div key={m.id} className="flex items-center gap-3 rounded-2xl bg-muted p-3">
+            <div key={m.id} className="flex items-center gap-3 tile p-3">
               <Avatar m={m} size={36} />
               <div><div className="font-bold">{m.first_name} — {turns} ans</div><div className="text-xs text-muted-foreground">{fmtDate(next)}</div></div>
             </div>
@@ -146,7 +146,7 @@ function PapaDashboard({ name }: { name: string }) {
 
 function Panel({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <section className="rounded-3xl bg-card p-5 shadow-soft">
+    <section className="card-modern p-5">
       <div className="mb-3 flex items-center justify-between"><h2 className="text-lg font-bold">{title}</h2>{action}</div>
       <div className="space-y-2">{children}</div>
     </section>
@@ -157,7 +157,7 @@ function Empty({ children }: { children: React.ReactNode }) {
 }
 function EvRow({ e, byId }: { e: { title: string; category: string; occ: Date; all_day: boolean; member_ids: string[] }; byId: Record<string, any> }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl bg-muted p-3">
+    <div className="flex items-center gap-3 tile p-3">
       <span className="text-xl">{EVENT_CATEGORIES[e.category]?.icon}</span>
       <div className="flex-1"><div className="font-semibold">{e.title}</div><div className="text-xs text-muted-foreground">{fmtDate(e.occ)}{!e.all_day && ` · ${fmtTime(e.occ)}`}</div></div>
       <div className="flex -space-x-2">{e.member_ids.slice(0, 4).map((id) => byId[id] && <Avatar key={id} m={byId[id]} size={24} />)}</div>

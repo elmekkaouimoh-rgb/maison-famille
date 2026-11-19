@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
-import { CalendarDays, Gift, Home, ListChecks, LogOut, Users } from "lucide-react";
+import { CalendarDays, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/hooks/use-me";
@@ -15,11 +15,14 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { data: me } = useMe();
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const path = useRouterState({ select: (st) => st.location.pathname });
   const nav = [
     { to: "/dashboard", label: "Accueil", icon: Home },
     { to: "/calendrier", label: "Calendrier", icon: CalendarDays },
     { to: "/taches", label: "Tâches", icon: ListChecks },
     { to: "/recompenses", label: "Récompenses", icon: Gift },
+    { to: "/repas", label: "Repas", icon: UtensilsCrossed },
+    ...(me?.isManager ? [{ to: "/budget", label: "Budget", icon: Wallet }, { to: "/sante", label: "Santé", icon: HeartPulse }] : []),
     ...(me?.isAdmin ? [{ to: "/famille", label: "Famille", icon: Users }] : []),
   ] as const;
 
@@ -31,15 +34,21 @@ export function AppShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-background md:flex">
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r bg-sidebar p-4 md:flex">
+    <div className="relative min-h-screen bg-background md:flex">
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
+        <div className="float-slow absolute -left-32 -top-32 size-[28rem] rounded-full bg-primary/20 blur-3xl" />
+        <div className="float-slow absolute -right-24 top-1/3 size-[24rem] rounded-full bg-accent/25 blur-3xl [animation-delay:-3s]" />
+        <div className="float-slow absolute bottom-0 left-1/3 size-[22rem] rounded-full bg-star/25 blur-3xl [animation-delay:-6s]" />
+      </div>
+      <aside className="sticky top-0 z-10 hidden h-screen w-64 shrink-0 flex-col p-4 md:flex">
+        <div className="card-modern flex h-full flex-col p-4">
         <div className="mb-8 flex items-center gap-2 px-2">
           <span className="text-3xl">🏡</span>
           <span className="font-display text-xl font-bold">Family OS</span>
         </div>
         <nav className="flex flex-1 flex-col gap-1">
           {nav.map((n) => (
-            <Link key={n.to} to={n.to} className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-semibold text-muted-foreground transition hover:bg-sidebar-accent" activeProps={{ className: "bg-sidebar-accent text-sidebar-accent-foreground" }}>
+            <Link key={n.to} to={n.to} className="flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-bold text-muted-foreground transition-all hover:translate-x-1 hover:bg-sidebar-accent" activeProps={{ className: "!bg-primary !text-primary-foreground shadow-soft" }}>
               <n.icon className="size-5" /> {n.label}
             </Link>
           ))}
@@ -51,15 +60,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Button size="icon" variant="ghost" onClick={signOut} aria-label="Se déconnecter"><LogOut className="size-4" /></Button>
           </div>
         )}
+        </div>
       </aside>
-      <header className="flex items-center justify-between border-b bg-card px-4 py-3 md:hidden">
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-card/70 px-4 py-3 backdrop-blur-xl md:hidden">
         <span className="font-display text-lg font-bold">🏡 Family OS</span>
         <Button size="icon" variant="ghost" onClick={signOut} aria-label="Se déconnecter"><LogOut className="size-4" /></Button>
       </header>
-      <main className="flex-1 p-4 pb-28 md:p-8">{children}</main>
-      <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-around border-t bg-card px-2 py-2 md:hidden">
+      <main className="relative z-10 min-w-0 flex-1 p-4 pb-28 md:p-8"><div key={path} className="rise">{children}</div></main>
+      <nav className="card-modern fixed inset-x-3 bottom-3 z-40 flex gap-1 overflow-x-auto px-2 py-2 md:hidden">
         {nav.map((n) => (
-          <Link key={n.to} to={n.to} className="flex flex-col items-center gap-0.5 rounded-xl px-2 py-1 text-[11px] font-semibold text-muted-foreground" activeProps={{ className: "text-primary" }}>
+          <Link key={n.to} to={n.to} className="flex min-w-16 flex-1 flex-col items-center gap-0.5 rounded-2xl px-2 py-1.5 text-[11px] font-bold text-muted-foreground transition" activeProps={{ className: "!bg-primary !text-primary-foreground" }}>
             <n.icon className="size-5" /> {n.label}
           </Link>
         ))}

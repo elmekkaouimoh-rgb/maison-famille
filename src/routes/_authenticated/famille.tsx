@@ -54,7 +54,7 @@ function MemberCard({ m, isSelf }: { m: Member; isSelf: boolean }) {
     if (error) toast.error(error.message); else refresh();
   }
   return (
-    <div className="rounded-3xl bg-card p-5 shadow-soft">
+    <div className="card-modern p-5">
       <div className="flex items-center gap-3">
         <Avatar m={m} size={52} />
         <div className="flex-1">

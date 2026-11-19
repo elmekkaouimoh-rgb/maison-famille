@@ -8,6 +8,13 @@
       "when": 1795093598978,
       "tag": "0000_family_os_core",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795094605283,
+      "tag": "0001_meals_budget_health",
+      "breakpoints": true
     }
   ]
 }

@@ -54,11 +54,11 @@ function TasksPage() {
         const list = shown.filter((t) => t.status === g || (g === "en_cours" && t.status === "terminee"));
         if (!list.length) return null;
         return (
-          <section key={g} className="rounded-3xl bg-card p-5 shadow-soft">
+          <section key={g} className="card-modern p-5">
             <h2 className="mb-3 text-lg font-bold">{TASK_STATUS[g]} <span className="text-muted-foreground">({list.length})</span></h2>
             <div className="space-y-2">
               {list.map((t) => (
-                <div key={t.id} className="flex flex-wrap items-center gap-3 rounded-2xl bg-muted p-3">
+                <div key={t.id} className="flex flex-wrap items-center gap-3 tile p-3">
                   <span className="text-2xl">{t.icon}</span>
                   <div className="min-w-40 flex-1">
                     <div className="font-bold">{t.title}</div>
