@@ -10,33 +10,131 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authenticated/calendrier'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedFamilleRouteImport } from './routes/_authenticated/famille'
+import { Route as AuthenticatedRecompensesRouteImport } from './routes/_authenticated/recompenses'
+import { Route as AuthenticatedTachesRouteImport } from './routes/_authenticated/taches'
+import { Route as AuthenticatedEnfantIdRouteImport } from './routes/_authenticated/enfant.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCalendrierRoute = AuthenticatedCalendrierRouteImport.update({
+  id: '/calendrier',
+  path: '/calendrier',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFamilleRoute = AuthenticatedFamilleRouteImport.update({
+  id: '/famille',
+  path: '/famille',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRecompensesRoute =
+  AuthenticatedRecompensesRouteImport.update({
+    id: '/recompenses',
+    path: '/recompenses',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTachesRoute = AuthenticatedTachesRouteImport.update({
+  id: '/taches',
+  path: '/taches',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedEnfantIdRoute = AuthenticatedEnfantIdRouteImport.update({
+  id: '/enfant/$id',
+  path: '/enfant/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/calendrier': typeof AuthenticatedCalendrierRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/famille': typeof AuthenticatedFamilleRoute
+  '/recompenses': typeof AuthenticatedRecompensesRoute
+  '/taches': typeof AuthenticatedTachesRoute
+  '/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/calendrier': typeof AuthenticatedCalendrierRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/famille': typeof AuthenticatedFamilleRoute
+  '/recompenses': typeof AuthenticatedRecompensesRoute
+  '/taches': typeof AuthenticatedTachesRoute
+  '/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/calendrier': typeof AuthenticatedCalendrierRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/famille': typeof AuthenticatedFamilleRoute
+  '/_authenticated/recompenses': typeof AuthenticatedRecompensesRoute
+  '/_authenticated/taches': typeof AuthenticatedTachesRoute
+  '/_authenticated/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/calendrier'
+    | '/dashboard'
+    | '/famille'
+    | '/recompenses'
+    | '/taches'
+    | '/enfant/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/calendrier'
+    | '/dashboard'
+    | '/famille'
+    | '/recompenses'
+    | '/taches'
+    | '/enfant/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/calendrier'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/famille'
+    | '/_authenticated/recompenses'
+    | '/_authenticated/taches'
+    | '/_authenticated/enfant/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +146,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/calendrier': {
+      id: '/_authenticated/calendrier'
+      path: '/calendrier'
+      fullPath: '/calendrier'
+      preLoaderRoute: typeof AuthenticatedCalendrierRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/famille': {
+      id: '/_authenticated/famille'
+      path: '/famille'
+      fullPath: '/famille'
+      preLoaderRoute: typeof AuthenticatedFamilleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/recompenses': {
+      id: '/_authenticated/recompenses'
+      path: '/recompenses'
+      fullPath: '/recompenses'
+      preLoaderRoute: typeof AuthenticatedRecompensesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/taches': {
+      id: '/_authenticated/taches'
+      path: '/taches'
+      fullPath: '/taches'
+      preLoaderRoute: typeof AuthenticatedTachesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/enfant/$id': {
+      id: '/_authenticated/enfant/$id'
+      path: '/enfant/$id'
+      fullPath: '/enfant/$id'
+      preLoaderRoute: typeof AuthenticatedEnfantIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCalendrierRoute: typeof AuthenticatedCalendrierRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFamilleRoute: typeof AuthenticatedFamilleRoute
+  AuthenticatedRecompensesRoute: typeof AuthenticatedRecompensesRoute
+  AuthenticatedTachesRoute: typeof AuthenticatedTachesRoute
+  AuthenticatedEnfantIdRoute: typeof AuthenticatedEnfantIdRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCalendrierRoute: AuthenticatedCalendrierRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFamilleRoute: AuthenticatedFamilleRoute,
+  AuthenticatedRecompensesRoute: AuthenticatedRecompensesRoute,
+  AuthenticatedTachesRoute: AuthenticatedTachesRoute,
+  AuthenticatedEnfantIdRoute: AuthenticatedEnfantIdRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
