@@ -17,6 +17,7 @@ import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authentic
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedEcoleRouteImport } from './routes/_authenticated/ecole'
 import { Route as AuthenticatedFamilleRouteImport } from './routes/_authenticated/famille'
+import { Route as AuthenticatedGardeRobeRouteImport } from './routes/_authenticated/garde-robe'
 import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedRecompensesRouteImport } from './routes/_authenticated/recompenses'
 import { Route as AuthenticatedRepasRouteImport } from './routes/_authenticated/repas'
@@ -64,6 +65,11 @@ const AuthenticatedFamilleRoute = AuthenticatedFamilleRouteImport.update({
   path: '/famille',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedGardeRobeRoute = AuthenticatedGardeRobeRouteImport.update({
+  id: '/garde-robe',
+  path: '/garde-robe',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
   id: '/messages',
   path: '/messages',
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/ecole': typeof AuthenticatedEcoleRoute
   '/famille': typeof AuthenticatedFamilleRoute
+  '/garde-robe': typeof AuthenticatedGardeRobeRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/recompenses': typeof AuthenticatedRecompensesRoute
   '/repas': typeof AuthenticatedRepasRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/ecole': typeof AuthenticatedEcoleRoute
   '/famille': typeof AuthenticatedFamilleRoute
+  '/garde-robe': typeof AuthenticatedGardeRobeRoute
   '/messages': typeof AuthenticatedMessagesRoute
   '/recompenses': typeof AuthenticatedRecompensesRoute
   '/repas': typeof AuthenticatedRepasRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/ecole': typeof AuthenticatedEcoleRoute
   '/_authenticated/famille': typeof AuthenticatedFamilleRoute
+  '/_authenticated/garde-robe': typeof AuthenticatedGardeRobeRoute
   '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/recompenses': typeof AuthenticatedRecompensesRoute
   '/_authenticated/repas': typeof AuthenticatedRepasRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ecole'
     | '/famille'
+    | '/garde-robe'
     | '/messages'
     | '/recompenses'
     | '/repas'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/ecole'
     | '/famille'
+    | '/garde-robe'
     | '/messages'
     | '/recompenses'
     | '/repas'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/ecole'
     | '/_authenticated/famille'
+    | '/_authenticated/garde-robe'
     | '/_authenticated/messages'
     | '/_authenticated/recompenses'
     | '/_authenticated/repas'
@@ -267,6 +279,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFamilleRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/garde-robe': {
+      id: '/_authenticated/garde-robe'
+      path: '/garde-robe'
+      fullPath: '/garde-robe'
+      preLoaderRoute: typeof AuthenticatedGardeRobeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/messages': {
       id: '/_authenticated/messages'
       path: '/messages'
@@ -325,6 +344,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEcoleRoute: typeof AuthenticatedEcoleRoute
   AuthenticatedFamilleRoute: typeof AuthenticatedFamilleRoute
+  AuthenticatedGardeRobeRoute: typeof AuthenticatedGardeRobeRoute
   AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedRecompensesRoute: typeof AuthenticatedRecompensesRoute
   AuthenticatedRepasRoute: typeof AuthenticatedRepasRoute
@@ -340,6 +360,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEcoleRoute: AuthenticatedEcoleRoute,
   AuthenticatedFamilleRoute: AuthenticatedFamilleRoute,
+  AuthenticatedGardeRobeRoute: AuthenticatedGardeRobeRoute,
   AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedRecompensesRoute: AuthenticatedRecompensesRoute,
   AuthenticatedRepasRoute: AuthenticatedRepasRoute,

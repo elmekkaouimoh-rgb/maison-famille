@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
-import { CalendarDays, Camera, GraduationCap, MessageCircle, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet } from "lucide-react";
+import { Menu, Shirt, CalendarDays, Camera, GraduationCap, MessageCircle, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/hooks/use-me";
@@ -10,6 +10,7 @@ import { changeMyPassword } from "@/lib/accounts.functions";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { NotificationBell } from "@/components/family/NotificationBell";
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -26,9 +27,12 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/ecole", label: "École", icon: GraduationCap },
     { to: "/repas", label: "Repas", icon: UtensilsCrossed },
     { to: "/souvenirs", label: "Souvenirs", icon: Camera },
+    { to: "/garde-robe", label: "Garde-robe", icon: Shirt },
     ...(me?.isManager ? [{ to: "/budget", label: "Budget", icon: Wallet }, { to: "/sante", label: "Santé", icon: HeartPulse }] : []),
     ...(me?.isAdmin ? [{ to: "/famille", label: "Famille", icon: Users }] : []),
   ] as const;
+  const bottom = nav.filter((n) => ["/dashboard", "/calendrier", "/taches", "/messages"].includes(n.to));
+  const [open, setOpen] = useState(false);
 
   async function signOut() {
     await qc.cancelQueries();
@@ -67,15 +71,28 @@ export function AppShell({ children }: { children: ReactNode }) {
         )}
         </div>
       </aside>
-      <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-card/70 px-4 py-3 backdrop-blur-xl md:hidden">
-        <span className="flex-1 font-display text-lg font-bold">🏡 Family OS</span>
+      <header className="sticky top-0 z-30 flex items-center gap-1 border-b bg-card/70 px-3 py-3 backdrop-blur-xl md:hidden">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild><Button size="icon" variant="ghost" aria-label="Ouvrir le menu"><Menu className="size-5" /></Button></SheetTrigger>
+          <SheetContent side="left" className="w-72 overflow-y-auto">
+            <SheetHeader><SheetTitle className="font-display">🏡 Family OS</SheetTitle></SheetHeader>
+            <nav className="mt-4 grid grid-cols-2 gap-2">
+              {nav.map((n) => (
+                <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="tile flex flex-col items-center gap-1 p-3 text-xs font-bold text-muted-foreground transition hover:scale-[1.03]" activeProps={{ className: "!bg-primary !text-primary-foreground" }}>
+                  <n.icon className="size-6" /> {n.label}
+                </Link>
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+        <span className="min-w-0 flex-1 truncate font-display text-lg font-bold">Family OS</span>
         <NotificationBell />
         <Button size="icon" variant="ghost" onClick={signOut} aria-label="Se déconnecter"><LogOut className="size-4" /></Button>
       </header>
       <main className="relative z-10 min-w-0 flex-1 p-4 pb-28 md:p-8"><div key={path} className="rise">{children}</div></main>
-      <nav className="card-modern fixed inset-x-3 bottom-3 z-40 flex gap-1 overflow-x-auto px-2 py-2 md:hidden">
-        {nav.map((n) => (
-          <Link key={n.to} to={n.to} className="flex min-w-16 flex-1 flex-col items-center gap-0.5 rounded-2xl px-2 py-1.5 text-[11px] font-bold text-muted-foreground transition" activeProps={{ className: "!bg-primary !text-primary-foreground" }}>
+      <nav className="card-modern fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 gap-1 px-2 py-2 md:hidden">
+        {bottom.map((n) => (
+          <Link key={n.to} to={n.to} className="flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-2xl px-2 py-1.5 text-[11px] font-bold text-muted-foreground transition" activeProps={{ className: "!bg-primary !text-primary-foreground" }}>
             <n.icon className="size-5" /> {n.label}
           </Link>
         ))}

@@ -29,6 +29,116 @@ export type Database = {
         }
         Relationships: []
       }
+      clothing_items: {
+        Row: {
+          category: string
+          condition: string | null
+          created_at: string
+          done: boolean
+          id: string
+          kind: string
+          location: string | null
+          member_id: string | null
+          price: number | null
+          priority: string
+          quantity: number
+          season: string
+          size: string | null
+          title: string
+          to_member_id: string | null
+        }
+        Insert: {
+          category?: string
+          condition?: string | null
+          created_at?: string
+          done?: boolean
+          id?: string
+          kind?: string
+          location?: string | null
+          member_id?: string | null
+          price?: number | null
+          priority?: string
+          quantity?: number
+          season?: string
+          size?: string | null
+          title: string
+          to_member_id?: string | null
+        }
+        Update: {
+          category?: string
+          condition?: string | null
+          created_at?: string
+          done?: boolean
+          id?: string
+          kind?: string
+          location?: string | null
+          member_id?: string | null
+          price?: number | null
+          priority?: string
+          quantity?: number
+          season?: string
+          size?: string | null
+          title?: string
+          to_member_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clothing_items_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clothing_items_to_member_id_fkey"
+            columns: ["to_member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      clothing_sizes: {
+        Row: {
+          bottom: string | null
+          height_cm: number | null
+          member_id: string
+          notes: string | null
+          pajamas: string | null
+          shoes: string | null
+          top: string | null
+          updated_at: string
+        }
+        Insert: {
+          bottom?: string | null
+          height_cm?: number | null
+          member_id: string
+          notes?: string | null
+          pajamas?: string | null
+          shoes?: string | null
+          top?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bottom?: string | null
+          height_cm?: number | null
+          member_id?: string
+          notes?: string | null
+          pajamas?: string | null
+          shoes?: string | null
+          top?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clothing_sizes_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_members: {
         Row: {
           conversation_id: string
