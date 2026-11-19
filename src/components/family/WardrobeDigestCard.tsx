@@ -46,7 +46,7 @@ export function WardrobeDigestCard({ kids }: { kids: Kid[] }) {
       </div>
       {stale.length > 0 && (
         <div role="alert" className="mb-3 rounded-2xl border border-accent bg-accent/30 p-3 text-sm font-semibold">
-          ⏰ Tailles à mettre à jour (plus de 6 mois) : {stale.map((k) => `${k.avatar} ${k.first_name}`).join(", ")}
+          ⏰ Tailles à mettre à jour (jamais mesurées ou plus de 6 mois) : {stale.map((k) => `${k.avatar} ${k.first_name}`).join(", ")}
         </div>
       )}
       <p className="mb-3 text-sm text-muted-foreground">{data?.needs ?? 0} vêtement(s) à renouveler.</p>
