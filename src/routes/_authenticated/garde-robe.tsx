@@ -89,10 +89,10 @@ function WardrobePage() {
         </div>
       )}
       {mgr && (
-        <div className="grid gap-4 sm:grid-cols-3">
-          <div className="card-modern p-4"><p className="text-xs font-bold text-muted-foreground">Budget réassort (famille)</p><p className="text-2xl font-bold">{shoppingBudget(allNeeds).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</p></div>
-          <div className="card-modern p-4"><p className="text-xs font-bold text-muted-foreground">Achats urgents</p><p className="text-2xl font-bold">{allNeeds.filter((i) => !i.done && i.priority === "urgent").length}</p></div>
-          <div className="card-modern p-4"><p className="text-xs font-bold text-muted-foreground">Affaires à transmettre</p><p className="text-2xl font-bold">{items.filter((i) => i.kind === "transmettre" && !i.done).length}</p></div>
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
+          <div className="card-modern p-3 sm:p-4"><p className="text-[11px] font-bold leading-tight text-muted-foreground sm:text-xs">Budget réassort (famille)</p><p className="text-lg font-bold sm:text-2xl">{shoppingBudget(allNeeds).toLocaleString("fr-FR", { style: "currency", currency: "EUR" })}</p></div>
+          <div className="card-modern p-3 sm:p-4"><p className="text-[11px] font-bold leading-tight text-muted-foreground sm:text-xs">Achats urgents</p><p className="text-lg font-bold sm:text-2xl">{allNeeds.filter((i) => !i.done && i.priority === "urgent").length}</p></div>
+          <div className="card-modern p-3 sm:p-4"><p className="text-[11px] font-bold leading-tight text-muted-foreground sm:text-xs">Affaires à transmettre</p><p className="text-lg font-bold sm:text-2xl">{items.filter((i) => i.kind === "transmettre" && !i.done).length}</p></div>
         </div>
       )}
       <div className="grid gap-4 lg:grid-cols-3">
@@ -125,8 +125,8 @@ function WardrobePage() {
             ))}
           </ul>
           {mgr && (
-            <form className="grid gap-2 sm:grid-cols-6" onSubmit={(e) => { e.preventDefault(); addNeed(); }}>
-              <Input className="sm:col-span-2" placeholder="Manteau d'hiver" value={need.title} onChange={(e) => setNeed({ ...need, title: e.target.value })} />
+            <form className="grid gap-2 sm:grid-cols-3" onSubmit={(e) => { e.preventDefault(); addNeed(); }}>
+              <Input className="sm:col-span-3" placeholder="Manteau d'hiver" value={need.title} onChange={(e) => setNeed({ ...need, title: e.target.value })} />
               <select className="rounded-md border bg-background px-2 text-sm" value={need.category} onChange={(e) => setNeed({ ...need, category: e.target.value })}>{CATS.map((c) => <option key={c}>{c}</option>)}</select>
               <select className="rounded-md border bg-background px-2 text-sm" value={need.season} onChange={(e) => setNeed({ ...need, season: e.target.value })}>{SEASONS.map((c) => <option key={c}>{c}</option>)}</select>
               <select className="rounded-md border bg-background px-2 text-sm" value={need.priority} onChange={(e) => setNeed({ ...need, priority: e.target.value })}>{PRIO.map((p) => <option key={p.k} value={p.k}>{p.l}</option>)}</select>
@@ -151,8 +151,8 @@ function WardrobePage() {
             ))}
           </ul>
           {mgr && (
-            <form className="grid gap-2 sm:grid-cols-6" onSubmit={(e) => { e.preventDefault(); addGive(); }}>
-              <Input className="sm:col-span-2" placeholder="Doudoune bleue" value={give.title} onChange={(e) => setGive({ ...give, title: e.target.value })} />
+            <form className="grid gap-2 sm:grid-cols-3" onSubmit={(e) => { e.preventDefault(); addGive(); }}>
+              <Input className="sm:col-span-3" placeholder="Doudoune bleue" value={give.title} onChange={(e) => setGive({ ...give, title: e.target.value })} />
               <Input placeholder="Taille" value={give.size} onChange={(e) => setGive({ ...give, size: e.target.value })} />
               <select className="rounded-md border bg-background px-2 text-sm" value={give.to} onChange={(e) => setGive({ ...give, to: e.target.value })} aria-label="Pour qui">
                 <option value="">Pour…</option>{kids.filter((k) => k.id !== current.id).map((k) => <option key={k.id} value={k.id}>{k.first_name}</option>)}
