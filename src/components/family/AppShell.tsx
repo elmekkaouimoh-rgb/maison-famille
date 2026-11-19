@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
-import { CalendarDays, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet } from "lucide-react";
+import { CalendarDays, Camera, GraduationCap, MessageCircle, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/hooks/use-me";
@@ -10,6 +10,7 @@ import { changeMyPassword } from "@/lib/accounts.functions";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { NotificationBell } from "@/components/family/NotificationBell";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { data: me } = useMe();
@@ -21,7 +22,10 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/calendrier", label: "Calendrier", icon: CalendarDays },
     { to: "/taches", label: "Tâches", icon: ListChecks },
     { to: "/recompenses", label: "Récompenses", icon: Gift },
+    { to: "/messages", label: "Messages", icon: MessageCircle },
+    { to: "/ecole", label: "École", icon: GraduationCap },
     { to: "/repas", label: "Repas", icon: UtensilsCrossed },
+    { to: "/souvenirs", label: "Souvenirs", icon: Camera },
     ...(me?.isManager ? [{ to: "/budget", label: "Budget", icon: Wallet }, { to: "/sante", label: "Santé", icon: HeartPulse }] : []),
     ...(me?.isAdmin ? [{ to: "/famille", label: "Famille", icon: Users }] : []),
   ] as const;
@@ -44,7 +48,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="card-modern flex h-full flex-col p-4">
         <div className="mb-8 flex items-center gap-2 px-2">
           <span className="text-3xl">🏡</span>
-          <span className="font-display text-xl font-bold">Family OS</span>
+          <span className="flex-1 font-display text-xl font-bold">Family OS</span>
+          <NotificationBell />
         </div>
         <nav className="flex flex-1 flex-col gap-1">
           {nav.map((n) => (
@@ -63,7 +68,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
       <header className="sticky top-0 z-30 flex items-center justify-between border-b bg-card/70 px-4 py-3 backdrop-blur-xl md:hidden">
-        <span className="font-display text-lg font-bold">🏡 Family OS</span>
+        <span className="flex-1 font-display text-lg font-bold">🏡 Family OS</span>
+        <NotificationBell />
         <Button size="icon" variant="ghost" onClick={signOut} aria-label="Se déconnecter"><LogOut className="size-4" /></Button>
       </header>
       <main className="relative z-10 min-w-0 flex-1 p-4 pb-28 md:p-8"><div key={path} className="rise">{children}</div></main>

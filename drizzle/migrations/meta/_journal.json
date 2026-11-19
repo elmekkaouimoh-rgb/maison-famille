@@ -15,6 +15,27 @@
       "when": 1795094605283,
       "tag": "0001_meals_budget_health",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795095430992,
+      "tag": "0002_school_messages_memories",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1795095449881,
+      "tag": "0003_memories_storage_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1795095562612,
+      "tag": "0004_conversation_people",
+      "breakpoints": true
     }
   ]
 }

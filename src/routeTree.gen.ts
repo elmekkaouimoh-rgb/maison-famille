@@ -15,10 +15,13 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedBudgetRouteImport } from './routes/_authenticated/budget'
 import { Route as AuthenticatedCalendrierRouteImport } from './routes/_authenticated/calendrier'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedEcoleRouteImport } from './routes/_authenticated/ecole'
 import { Route as AuthenticatedFamilleRouteImport } from './routes/_authenticated/famille'
+import { Route as AuthenticatedMessagesRouteImport } from './routes/_authenticated/messages'
 import { Route as AuthenticatedRecompensesRouteImport } from './routes/_authenticated/recompenses'
 import { Route as AuthenticatedRepasRouteImport } from './routes/_authenticated/repas'
 import { Route as AuthenticatedSanteRouteImport } from './routes/_authenticated/sante'
+import { Route as AuthenticatedSouvenirsRouteImport } from './routes/_authenticated/souvenirs'
 import { Route as AuthenticatedTachesRouteImport } from './routes/_authenticated/taches'
 import { Route as AuthenticatedEnfantIdRouteImport } from './routes/_authenticated/enfant.$id'
 
@@ -51,9 +54,19 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEcoleRoute = AuthenticatedEcoleRouteImport.update({
+  id: '/ecole',
+  path: '/ecole',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFamilleRoute = AuthenticatedFamilleRouteImport.update({
   id: '/famille',
   path: '/famille',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMessagesRoute = AuthenticatedMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRecompensesRoute =
@@ -70,6 +83,11 @@ const AuthenticatedRepasRoute = AuthenticatedRepasRouteImport.update({
 const AuthenticatedSanteRoute = AuthenticatedSanteRouteImport.update({
   id: '/sante',
   path: '/sante',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSouvenirsRoute = AuthenticatedSouvenirsRouteImport.update({
+  id: '/souvenirs',
+  path: '/souvenirs',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedTachesRoute = AuthenticatedTachesRouteImport.update({
@@ -89,10 +107,13 @@ export interface FileRoutesByFullPath {
   '/budget': typeof AuthenticatedBudgetRoute
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ecole': typeof AuthenticatedEcoleRoute
   '/famille': typeof AuthenticatedFamilleRoute
+  '/messages': typeof AuthenticatedMessagesRoute
   '/recompenses': typeof AuthenticatedRecompensesRoute
   '/repas': typeof AuthenticatedRepasRoute
   '/sante': typeof AuthenticatedSanteRoute
+  '/souvenirs': typeof AuthenticatedSouvenirsRoute
   '/taches': typeof AuthenticatedTachesRoute
   '/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
@@ -102,10 +123,13 @@ export interface FileRoutesByTo {
   '/budget': typeof AuthenticatedBudgetRoute
   '/calendrier': typeof AuthenticatedCalendrierRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ecole': typeof AuthenticatedEcoleRoute
   '/famille': typeof AuthenticatedFamilleRoute
+  '/messages': typeof AuthenticatedMessagesRoute
   '/recompenses': typeof AuthenticatedRecompensesRoute
   '/repas': typeof AuthenticatedRepasRoute
   '/sante': typeof AuthenticatedSanteRoute
+  '/souvenirs': typeof AuthenticatedSouvenirsRoute
   '/taches': typeof AuthenticatedTachesRoute
   '/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
@@ -117,10 +141,13 @@ export interface FileRoutesById {
   '/_authenticated/budget': typeof AuthenticatedBudgetRoute
   '/_authenticated/calendrier': typeof AuthenticatedCalendrierRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/ecole': typeof AuthenticatedEcoleRoute
   '/_authenticated/famille': typeof AuthenticatedFamilleRoute
+  '/_authenticated/messages': typeof AuthenticatedMessagesRoute
   '/_authenticated/recompenses': typeof AuthenticatedRecompensesRoute
   '/_authenticated/repas': typeof AuthenticatedRepasRoute
   '/_authenticated/sante': typeof AuthenticatedSanteRoute
+  '/_authenticated/souvenirs': typeof AuthenticatedSouvenirsRoute
   '/_authenticated/taches': typeof AuthenticatedTachesRoute
   '/_authenticated/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
@@ -132,10 +159,13 @@ export interface FileRouteTypes {
     | '/budget'
     | '/calendrier'
     | '/dashboard'
+    | '/ecole'
     | '/famille'
+    | '/messages'
     | '/recompenses'
     | '/repas'
     | '/sante'
+    | '/souvenirs'
     | '/taches'
     | '/enfant/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -145,10 +175,13 @@ export interface FileRouteTypes {
     | '/budget'
     | '/calendrier'
     | '/dashboard'
+    | '/ecole'
     | '/famille'
+    | '/messages'
     | '/recompenses'
     | '/repas'
     | '/sante'
+    | '/souvenirs'
     | '/taches'
     | '/enfant/$id'
   id:
@@ -159,10 +192,13 @@ export interface FileRouteTypes {
     | '/_authenticated/budget'
     | '/_authenticated/calendrier'
     | '/_authenticated/dashboard'
+    | '/_authenticated/ecole'
     | '/_authenticated/famille'
+    | '/_authenticated/messages'
     | '/_authenticated/recompenses'
     | '/_authenticated/repas'
     | '/_authenticated/sante'
+    | '/_authenticated/souvenirs'
     | '/_authenticated/taches'
     | '/_authenticated/enfant/$id'
   fileRoutesById: FileRoutesById
@@ -217,11 +253,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ecole': {
+      id: '/_authenticated/ecole'
+      path: '/ecole'
+      fullPath: '/ecole'
+      preLoaderRoute: typeof AuthenticatedEcoleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/famille': {
       id: '/_authenticated/famille'
       path: '/famille'
       fullPath: '/famille'
       preLoaderRoute: typeof AuthenticatedFamilleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/messages': {
+      id: '/_authenticated/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof AuthenticatedMessagesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/recompenses': {
@@ -245,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSanteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/souvenirs': {
+      id: '/_authenticated/souvenirs'
+      path: '/souvenirs'
+      fullPath: '/souvenirs'
+      preLoaderRoute: typeof AuthenticatedSouvenirsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/taches': {
       id: '/_authenticated/taches'
       path: '/taches'
@@ -266,10 +323,13 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBudgetRoute: typeof AuthenticatedBudgetRoute
   AuthenticatedCalendrierRoute: typeof AuthenticatedCalendrierRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEcoleRoute: typeof AuthenticatedEcoleRoute
   AuthenticatedFamilleRoute: typeof AuthenticatedFamilleRoute
+  AuthenticatedMessagesRoute: typeof AuthenticatedMessagesRoute
   AuthenticatedRecompensesRoute: typeof AuthenticatedRecompensesRoute
   AuthenticatedRepasRoute: typeof AuthenticatedRepasRoute
   AuthenticatedSanteRoute: typeof AuthenticatedSanteRoute
+  AuthenticatedSouvenirsRoute: typeof AuthenticatedSouvenirsRoute
   AuthenticatedTachesRoute: typeof AuthenticatedTachesRoute
   AuthenticatedEnfantIdRoute: typeof AuthenticatedEnfantIdRoute
 }
@@ -278,10 +338,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBudgetRoute: AuthenticatedBudgetRoute,
   AuthenticatedCalendrierRoute: AuthenticatedCalendrierRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEcoleRoute: AuthenticatedEcoleRoute,
   AuthenticatedFamilleRoute: AuthenticatedFamilleRoute,
+  AuthenticatedMessagesRoute: AuthenticatedMessagesRoute,
   AuthenticatedRecompensesRoute: AuthenticatedRecompensesRoute,
   AuthenticatedRepasRoute: AuthenticatedRepasRoute,
   AuthenticatedSanteRoute: AuthenticatedSanteRoute,
+  AuthenticatedSouvenirsRoute: AuthenticatedSouvenirsRoute,
   AuthenticatedTachesRoute: AuthenticatedTachesRoute,
   AuthenticatedEnfantIdRoute: AuthenticatedEnfantIdRoute,
 }

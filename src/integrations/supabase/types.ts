@@ -29,6 +29,63 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_members: {
+        Row: {
+          conversation_id: string
+          last_read_at: string
+          member_id: string
+        }
+        Insert: {
+          conversation_id: string
+          last_read_at?: string
+          member_id: string
+        }
+        Update: {
+          conversation_id?: string
+          last_read_at?: string
+          member_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_members_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conversation_members_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          icon: string
+          id: string
+          last_message_at: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          icon?: string
+          id?: string
+          last_message_at?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string
+          id?: string
+          last_message_at?: string
+          title?: string
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           all_day: boolean
@@ -184,6 +241,119 @@ export type Database = {
         }
         Relationships: []
       }
+      memories: {
+        Row: {
+          created_at: string
+          day: string
+          description: string | null
+          favorite: boolean
+          file_path: string | null
+          id: string
+          kind: string
+          member_ids: string[]
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          day?: string
+          description?: string | null
+          favorite?: boolean
+          file_path?: string | null
+          id?: string
+          kind?: string
+          member_ids?: string[]
+          title: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          description?: string | null
+          favorite?: boolean
+          file_path?: string | null
+          id?: string
+          kind?: string
+          member_ids?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          member_id: string
+          read: boolean
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          member_id: string
+          read?: boolean
+          title: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          member_id?: string
+          read?: boolean
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reward_claims: {
         Row: {
           created_at: string
@@ -313,6 +483,85 @@ export type Database = {
             foreignKeyName: "routines_member_id_fkey"
             columns: ["member_id"]
             isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_items: {
+        Row: {
+          created_at: string
+          done: boolean
+          due_date: string | null
+          grade: number | null
+          id: string
+          kind: string
+          member_id: string
+          out_of: number | null
+          subject: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          due_date?: string | null
+          grade?: number | null
+          id?: string
+          kind?: string
+          member_id: string
+          out_of?: number | null
+          subject?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          due_date?: string | null
+          grade?: number | null
+          id?: string
+          kind?: string
+          member_id?: string
+          out_of?: number | null
+          subject?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_items_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_profiles: {
+        Row: {
+          class_name: string | null
+          member_id: string
+          notes: string | null
+          school: string | null
+          teacher: string | null
+        }
+        Insert: {
+          class_name?: string | null
+          member_id: string
+          notes?: string | null
+          school?: string | null
+          teacher?: string | null
+        }
+        Update: {
+          class_name?: string | null
+          member_id?: string
+          notes?: string | null
+          school?: string | null
+          teacher?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_profiles_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: true
             referencedRelation: "members"
             referencedColumns: ["id"]
           },
@@ -459,6 +708,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_see_memory_file: { Args: { _path: string }; Returns: boolean }
+      conversation_people: {
+        Args: never
+        Returns: {
+          avatar: string
+          color: string
+          first_name: string
+          id: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -466,6 +725,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      in_conversation: { Args: { _conv: string }; Returns: boolean }
       is_manager: { Args: never; Returns: boolean }
       my_member_id: { Args: never; Returns: string }
     }
