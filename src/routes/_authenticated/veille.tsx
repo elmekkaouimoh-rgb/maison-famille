@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { membersQuery, useMe } from "@/hooks/use-me";
 import { fmtDate, fmtTime } from "@/lib/family";
-import { VEILLE_CATEGORIES, type VeilleCategory } from "@/lib/veille";
+import { CHILD_DEFAULT_CATEGORIES, VEILLE_CATEGORIES, type VeilleCategory } from "@/lib/veille";
 import { importVeille } from "@/lib/veille.functions";
 import { VeilleList } from "@/components/family/VeilleList";
 import { Button } from "@/components/ui/button";
@@ -54,7 +54,7 @@ function VeillePage() {
   async function addSource() {
     if (!nf.consent) { toast.error("Confirmez votre accord pour ce domaine"); return; }
     let host = ""; try { const u = new URL(nf.url); if (u.protocol !== "https:") throw 0; host = u.hostname; } catch { toast.error("Adresse https invalide"); return; }
-    const { error } = await supabase.from("veille_sources").insert({ label: nf.label.trim() || host, url: nf.url.replace(/\/$/, ""), domain: host, member_id: nf.member_id, categories: CATS, child_categories: ["devoir", "controle", "note", "changement_horaire", "evenement"] });
+    const { error } = await supabase.from("veille_sources").insert({ label: nf.label.trim() || host, url: nf.url.replace(/\/$/, ""), domain: host, member_id: nf.member_id, categories: CATS, child_categories: CHILD_DEFAULT_CATEGORIES });
     if (error) toast.error(error.message); else { setNf({ label: "", url: "", member_id: "", consent: false }); refresh(); }
   }
   async function patchSource(id: string, patch: { active?: boolean; categories?: string[]; child_categories?: string[] }) {

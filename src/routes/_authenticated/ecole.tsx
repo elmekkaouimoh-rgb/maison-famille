@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { VeilleList } from "@/components/family/VeilleList";
+import { SchoolVeille } from "@/components/family/VeilleList";
 
 export const Route = createFileRoute("/_authenticated/ecole")({
   head: () => ({ meta: [{ title: "Scolarité — EL MEKKAOUI" }, { name: "description", content: "Devoirs, contrôles, notes et progrès scolaires." }] }),
@@ -81,6 +81,8 @@ function SchoolPage() {
         <Gauge label="Devoirs faits" value={prog.homeworkDone != null ? `${prog.homeworkDone} %` : "—"} pct={prog.homeworkDone ?? 0} />
       </div>
 
+      <SchoolVeille memberId={cur.id} />
+
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="card-modern p-5">
           <h2 className="mb-3 text-lg font-bold">📚 Devoirs & contrôles</h2>
@@ -141,8 +143,6 @@ function SchoolPage() {
           </div>
         </section>
       )}
-
-      <VeilleList memberId={cur.id} title="Veille scolaire" />
 
       {me?.isManager && (
         <section className="card-modern p-5">

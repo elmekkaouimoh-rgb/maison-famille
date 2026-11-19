@@ -64,6 +64,13 @@
       "when": 1795109304379,
       "tag": "0008_veille_familiale",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795110194099,
+      "tag": "0009_veille_school_extended",
+      "breakpoints": true
     }
   ]
 }

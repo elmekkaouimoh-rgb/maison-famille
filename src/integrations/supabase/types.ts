@@ -823,72 +823,93 @@ export type Database = {
         Row: {
           category: string
           child_visible: boolean
+          class_average: number | null
+          coefficient: number | null
           collected_at: string
           day: string | null
           description: string | null
+          document_url: string | null
           done_state: string
           ends_at: string | null
           first_seen: string
           grade: number | null
           grade_raw: string | null
+          grade_status: string | null
           id: string
+          justified: boolean | null
           last_seen: string
           location: string | null
           member_id: string
           out_of: number | null
+          period: string | null
           possible_duplicate: boolean
           source_id: string
           source_key: string
           source_status: string | null
           starts_at: string | null
+          subject: string | null
           title: string
           uncertainties: string[]
         }
         Insert: {
           category: string
           child_visible?: boolean
+          class_average?: number | null
+          coefficient?: number | null
           collected_at: string
           day?: string | null
           description?: string | null
+          document_url?: string | null
           done_state?: string
           ends_at?: string | null
           first_seen?: string
           grade?: number | null
           grade_raw?: string | null
+          grade_status?: string | null
           id?: string
+          justified?: boolean | null
           last_seen?: string
           location?: string | null
           member_id: string
           out_of?: number | null
+          period?: string | null
           possible_duplicate?: boolean
           source_id: string
           source_key: string
           source_status?: string | null
           starts_at?: string | null
+          subject?: string | null
           title: string
           uncertainties?: string[]
         }
         Update: {
           category?: string
           child_visible?: boolean
+          class_average?: number | null
+          coefficient?: number | null
           collected_at?: string
           day?: string | null
           description?: string | null
+          document_url?: string | null
           done_state?: string
           ends_at?: string | null
           first_seen?: string
           grade?: number | null
           grade_raw?: string | null
+          grade_status?: string | null
           id?: string
+          justified?: boolean | null
           last_seen?: string
           location?: string | null
           member_id?: string
           out_of?: number | null
+          period?: string | null
           possible_duplicate?: boolean
           source_id?: string
           source_key?: string
           source_status?: string | null
           starts_at?: string | null
+          subject?: string | null
           title?: string
           uncertainties?: string[]
         }
