@@ -819,6 +819,190 @@ export type Database = {
         }
         Relationships: []
       }
+      veille_items: {
+        Row: {
+          category: string
+          child_visible: boolean
+          collected_at: string
+          day: string | null
+          description: string | null
+          done_state: string
+          ends_at: string | null
+          first_seen: string
+          grade: number | null
+          grade_raw: string | null
+          id: string
+          last_seen: string
+          location: string | null
+          member_id: string
+          out_of: number | null
+          possible_duplicate: boolean
+          source_id: string
+          source_key: string
+          source_status: string | null
+          starts_at: string | null
+          title: string
+          uncertainties: string[]
+        }
+        Insert: {
+          category: string
+          child_visible?: boolean
+          collected_at: string
+          day?: string | null
+          description?: string | null
+          done_state?: string
+          ends_at?: string | null
+          first_seen?: string
+          grade?: number | null
+          grade_raw?: string | null
+          id?: string
+          last_seen?: string
+          location?: string | null
+          member_id: string
+          out_of?: number | null
+          possible_duplicate?: boolean
+          source_id: string
+          source_key: string
+          source_status?: string | null
+          starts_at?: string | null
+          title: string
+          uncertainties?: string[]
+        }
+        Update: {
+          category?: string
+          child_visible?: boolean
+          collected_at?: string
+          day?: string | null
+          description?: string | null
+          done_state?: string
+          ends_at?: string | null
+          first_seen?: string
+          grade?: number | null
+          grade_raw?: string | null
+          id?: string
+          last_seen?: string
+          location?: string | null
+          member_id?: string
+          out_of?: number | null
+          possible_duplicate?: boolean
+          source_id?: string
+          source_key?: string
+          source_status?: string | null
+          starts_at?: string | null
+          title?: string
+          uncertainties?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "veille_items_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "veille_items_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "veille_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      veille_runs: {
+        Row: {
+          collected_at: string | null
+          coverage: Json
+          created: number
+          created_at: string
+          duplicates: number
+          errors: Json
+          id: string
+          rejected: number
+          source_id: string
+          unchanged: number
+          updated: number
+        }
+        Insert: {
+          collected_at?: string | null
+          coverage?: Json
+          created?: number
+          created_at?: string
+          duplicates?: number
+          errors?: Json
+          id?: string
+          rejected?: number
+          source_id: string
+          unchanged?: number
+          updated?: number
+        }
+        Update: {
+          collected_at?: string | null
+          coverage?: Json
+          created?: number
+          created_at?: string
+          duplicates?: number
+          errors?: Json
+          id?: string
+          rejected?: number
+          source_id?: string
+          unchanged?: number
+          updated?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "veille_runs_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "veille_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      veille_sources: {
+        Row: {
+          active: boolean
+          categories: string[]
+          child_categories: string[]
+          created_at: string
+          domain: string
+          id: string
+          label: string
+          member_id: string
+          url: string
+        }
+        Insert: {
+          active?: boolean
+          categories?: string[]
+          child_categories?: string[]
+          created_at?: string
+          domain: string
+          id?: string
+          label: string
+          member_id: string
+          url: string
+        }
+        Update: {
+          active?: boolean
+          categories?: string[]
+          child_categories?: string[]
+          created_at?: string
+          domain?: string
+          id?: string
+          label?: string
+          member_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "veille_sources_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wardrobe_digests: {
         Row: {
           created_at: string
@@ -875,6 +1059,10 @@ export type Database = {
       is_family: { Args: never; Returns: boolean }
       is_manager: { Args: never; Returns: boolean }
       my_member_id: { Args: never; Returns: string }
+      veille_import: {
+        Args: { _apply: boolean; _items: Json; _source: string }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "adulte" | "ado" | "enfant" | "petit"

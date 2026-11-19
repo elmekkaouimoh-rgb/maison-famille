@@ -24,6 +24,7 @@ import { Route as AuthenticatedRepasRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSanteRouteImport } from './routes/_authenticated/sante'
 import { Route as AuthenticatedSouvenirsRouteImport } from './routes/_authenticated/souvenirs'
 import { Route as AuthenticatedTachesRouteImport } from './routes/_authenticated/taches'
+import { Route as AuthenticatedVeilleRouteImport } from './routes/_authenticated/veille'
 import { Route as AuthenticatedEnfantIdRouteImport } from './routes/_authenticated/enfant.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -101,6 +102,11 @@ const AuthenticatedTachesRoute = AuthenticatedTachesRouteImport.update({
   path: '/taches',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedVeilleRoute = AuthenticatedVeilleRouteImport.update({
+  id: '/veille',
+  path: '/veille',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedEnfantIdRoute = AuthenticatedEnfantIdRouteImport.update({
   id: '/enfant/$id',
   path: '/enfant/$id',
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/sante': typeof AuthenticatedSanteRoute
   '/souvenirs': typeof AuthenticatedSouvenirsRoute
   '/taches': typeof AuthenticatedTachesRoute
+  '/veille': typeof AuthenticatedVeilleRoute
   '/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
 export interface FileRoutesByTo {
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/sante': typeof AuthenticatedSanteRoute
   '/souvenirs': typeof AuthenticatedSouvenirsRoute
   '/taches': typeof AuthenticatedTachesRoute
+  '/veille': typeof AuthenticatedVeilleRoute
   '/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
 export interface FileRoutesById {
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/_authenticated/sante': typeof AuthenticatedSanteRoute
   '/_authenticated/souvenirs': typeof AuthenticatedSouvenirsRoute
   '/_authenticated/taches': typeof AuthenticatedTachesRoute
+  '/_authenticated/veille': typeof AuthenticatedVeilleRoute
   '/_authenticated/enfant/$id': typeof AuthenticatedEnfantIdRoute
 }
 export interface FileRouteTypes {
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/sante'
     | '/souvenirs'
     | '/taches'
+    | '/veille'
     | '/enfant/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -194,6 +204,7 @@ export interface FileRouteTypes {
     | '/sante'
     | '/souvenirs'
     | '/taches'
+    | '/veille'
     | '/enfant/$id'
   id:
     | '__root__'
@@ -212,6 +223,7 @@ export interface FileRouteTypes {
     | '/_authenticated/sante'
     | '/_authenticated/souvenirs'
     | '/_authenticated/taches'
+    | '/_authenticated/veille'
     | '/_authenticated/enfant/$id'
   fileRoutesById: FileRoutesById
 }
@@ -328,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTachesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/veille': {
+      id: '/_authenticated/veille'
+      path: '/veille'
+      fullPath: '/veille'
+      preLoaderRoute: typeof AuthenticatedVeilleRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/enfant/$id': {
       id: '/_authenticated/enfant/$id'
       path: '/enfant/$id'
@@ -351,6 +370,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedSanteRoute: typeof AuthenticatedSanteRoute
   AuthenticatedSouvenirsRoute: typeof AuthenticatedSouvenirsRoute
   AuthenticatedTachesRoute: typeof AuthenticatedTachesRoute
+  AuthenticatedVeilleRoute: typeof AuthenticatedVeilleRoute
   AuthenticatedEnfantIdRoute: typeof AuthenticatedEnfantIdRoute
 }
 
@@ -367,6 +387,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSanteRoute: AuthenticatedSanteRoute,
   AuthenticatedSouvenirsRoute: AuthenticatedSouvenirsRoute,
   AuthenticatedTachesRoute: AuthenticatedTachesRoute,
+  AuthenticatedVeilleRoute: AuthenticatedVeilleRoute,
   AuthenticatedEnfantIdRoute: AuthenticatedEnfantIdRoute,
 }
 

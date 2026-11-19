@@ -32,3 +32,4 @@ use the editor.
 - Family OS: logins use username→synthetic email (lib/family.ts); account admin ops live in src/lib/accounts.functions.ts behind has_role admin; privileges come from user_roles, members.family_role is display only.
 - Wardrobe AI digests are stored per week as "en_attente" and recommendations display only after a manager validates them (visibleRecommendations) — parent approval before any advice.
 - Shared family tables (meals, shopping, rewards) gate reads on public.is_family() (active linked member), never USING (true).
+- Veille (school watch) imports go only through importVeille (requireSupabaseAuth + admin check) calling SQL veille_import (security invoker, RLS, all-or-nothing, upsert on source_id+source_key, never deletes); real child data/sources live only in the database, never in code or migrations.

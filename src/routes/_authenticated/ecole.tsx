@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { VeilleList } from "@/components/family/VeilleList";
 
 export const Route = createFileRoute("/_authenticated/ecole")({
   head: () => ({ meta: [{ title: "Scolarité — EL MEKKAOUI" }, { name: "description", content: "Devoirs, contrôles, notes et progrès scolaires." }] }),
@@ -140,6 +141,8 @@ function SchoolPage() {
           </div>
         </section>
       )}
+
+      <VeilleList memberId={cur.id} title="Veille scolaire" />
 
       {me?.isManager && (
         <section className="card-modern p-5">

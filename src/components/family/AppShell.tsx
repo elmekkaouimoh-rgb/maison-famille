@@ -2,7 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, type ReactNode } from "react";
-import { Menu, Plus, Smile, Shirt, CalendarDays, Camera, GraduationCap, MessageCircle, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet } from "lucide-react";
+import { Menu, Plus, Smile, Shirt, CalendarDays, Camera, GraduationCap, MessageCircle, Gift, HeartPulse, Home, ListChecks, LogOut, Users, UtensilsCrossed, Wallet, Radar } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useMe } from "@/hooks/use-me";
@@ -30,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     { to: "/souvenirs", label: "Souvenirs", icon: Camera },
     { to: "/garde-robe", label: "Garde-robe", icon: Shirt },
     ...(me?.isManager ? [{ to: "/budget", label: "Budget", icon: Wallet }, { to: "/sante", label: "Santé", icon: HeartPulse }] : []),
-    ...(me?.isAdmin ? [{ to: "/famille", label: "Famille", icon: Users }] : []),
+    ...(me?.isAdmin ? [{ to: "/famille", label: "Famille", icon: Users }, { to: "/veille", label: "Veille", icon: Radar }] : []),
   ] as const;
   const bottom = [
     { to: "/dashboard", label: "Accueil", icon: Home },

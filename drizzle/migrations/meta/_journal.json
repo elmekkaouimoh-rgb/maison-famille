@@ -57,6 +57,13 @@
       "when": 1795104791374,
       "tag": "0007_member_photos_child_memories",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795109304379,
+      "tag": "0008_veille_familiale",
+      "breakpoints": true
     }
   ]
 }

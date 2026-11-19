@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { membersQuery, useMe } from "@/hooks/use-me";
 import { Avatar } from "@/components/family/AppShell";
+import { VeilleList } from "@/components/family/VeilleList";
 import { expandEvents, fmtTime, EVENT_CATEGORIES } from "@/lib/family";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -125,6 +126,8 @@ function CalendarPage() {
         <h2 className="mb-3 text-lg font-bold capitalize">{format(view === "mois" ? selected : cursor, "EEEE dd/MM/yyyy", { locale: fr })}</h2>
         {(!dayList.length ? <p className="text-sm text-muted-foreground">Aucun événement.</p> : <div className="grid gap-2 sm:grid-cols-2">{dayList.map((e) => <EventCard key={e.id + e.occ.toISOString()} e={e} byId={byId} canDelete={me?.isManager} />)}</div>)}
       </section>}
+
+      <VeilleList onlyDated title="Échéances scolaires (veille)" />
     </div>
   );
 }
