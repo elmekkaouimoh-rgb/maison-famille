@@ -15,3 +15,14 @@ describe("garde-robe", () => {
     expect(sizesAreStale("2026-08-01", today)).toBe(false);
   });
 });
+
+import { visibleRecommendations, weekStart } from "./wardrobe";
+describe("résumé hebdo garde-robe", () => {
+  it("aucune recommandation avant validation", () => {
+    expect(visibleRecommendations({ status: "en_attente", recommendations: ["a"] })).toEqual([]);
+    expect(visibleRecommendations({ status: "validee", recommendations: ["a"] })).toEqual(["a"]);
+  });
+  it("semaine commence le lundi", () => {
+    expect(weekStart(new Date(2026, 10, 19))).toBe("2026-11-16");
+  });
+});

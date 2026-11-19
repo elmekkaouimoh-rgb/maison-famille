@@ -813,6 +813,36 @@ export type Database = {
         }
         Relationships: []
       }
+      wardrobe_digests: {
+        Row: {
+          created_at: string
+          id: string
+          recommendations: Json
+          status: string
+          summary: string
+          validated_at: string | null
+          week_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          recommendations?: Json
+          status?: string
+          summary: string
+          validated_at?: string | null
+          week_start: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          recommendations?: Json
+          status?: string
+          summary?: string
+          validated_at?: string | null
+          week_start?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -836,6 +866,7 @@ export type Database = {
         Returns: boolean
       }
       in_conversation: { Args: { _conv: string }; Returns: boolean }
+      is_family: { Args: never; Returns: boolean }
       is_manager: { Args: never; Returns: boolean }
       my_member_id: { Args: never; Returns: string }
     }

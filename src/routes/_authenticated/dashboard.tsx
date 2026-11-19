@@ -9,6 +9,7 @@ import { Avatar } from "@/components/family/AppShell";
 import { ageFrom, expandEvents, fmtDate, fmtTime, EVENT_CATEGORIES, INTERFACE_LABELS } from "@/lib/family";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { WardrobeDigestCard } from "@/components/family/WardrobeDigestCard";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Tableau de bord — Family OS" }, { name: "description", content: "Vue d'ensemble de la famille." }] }),
@@ -80,6 +81,7 @@ function PapaDashboard({ name }: { name: string }) {
           ))}
         </div>
       </section>
+      <WardrobeDigestCard kids={kids} />
 
       <section>
         <h2 className="mb-3 text-xl font-bold">Les enfants</h2>

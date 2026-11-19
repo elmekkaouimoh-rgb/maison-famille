@@ -43,6 +43,13 @@
       "when": 1795098398826,
       "tag": "0005_wardrobe",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795102255338,
+      "tag": "0006_security_fixes_wardrobe_digest",
+      "breakpoints": true
     }
   ]
 }

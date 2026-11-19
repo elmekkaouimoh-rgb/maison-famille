@@ -98,7 +98,8 @@ function WardrobePage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <section className={cn("card-modern card-hover p-5", stale && "ring-2 ring-star/60")}>
           <h2 className="mb-1 text-lg font-bold">📐 Tailles de {current.first_name}</h2>
-          <p className="mb-3 text-xs font-semibold text-muted-foreground">{ageFrom(current.birth_date)} ans · {sizes?.updated_at ? `mesuré le ${fmtDate(sizes.updated_at.slice(0, 10))}` : "jamais mesuré"}{stale && " · ⏰ à remesurer"}</p>
+          <p className="mb-3 text-xs font-semibold text-muted-foreground">{ageFrom(current.birth_date)} ans · {sizes?.updated_at ? `mesuré le ${fmtDate(sizes.updated_at.slice(0, 10))}` : "jamais mesuré"}</p>
+          {stale && <div role="alert" className="mb-3 rounded-2xl border border-accent bg-accent/30 p-3 text-sm font-semibold">⏰ Les tailles de {current.first_name} n'ont pas été mises à jour depuis plus de 6 mois. Pensez à les remesurer.</div>}
           <div className="space-y-2">
             {SIZE_FIELDS.map((f) => (
               <label key={f.key} className="tile flex items-center gap-2 p-2 text-sm font-semibold">
