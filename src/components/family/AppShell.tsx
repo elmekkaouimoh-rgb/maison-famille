@@ -64,7 +64,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </nav>
         {me?.member && (
           <div className="flex items-center gap-2 rounded-2xl bg-muted p-2">
-            <span className="flex size-9 items-center justify-center rounded-full text-lg" style={{ background: me.member.color }}>{me.member.avatar}</span>
+            <Avatar m={me.member} size={36} />
             <span className="flex-1 truncate text-sm font-bold">{me.member.first_name}</span>
             <Button size="icon" variant="ghost" onClick={signOut} aria-label="Se déconnecter"><LogOut className="size-4" /></Button>
           </div>
@@ -135,8 +135,9 @@ function ForcePassword() {
   );
 }
 
-export function Avatar({ m, size = 40 }: { m: { avatar: string; color: string; first_name: string } | undefined; size?: number }) {
+export function Avatar({ m, size = 40 }: { m: { avatar: string; color: string; first_name: string; photo_url?: string | undefined } | undefined; size?: number }) {
   if (!m) return null;
+  if (m.photo_url) return <img src={m.photo_url} alt={m.first_name} title={m.first_name} className="inline-block shrink-0 rounded-full object-cover ring-2 ring-card" style={{ width: size, height: size }} />;
   return (
     <span title={m.first_name} className="inline-flex shrink-0 items-center justify-center rounded-full ring-2 ring-card" style={{ background: m.color, width: size, height: size, fontSize: size * 0.5 }}>
       {m.avatar}

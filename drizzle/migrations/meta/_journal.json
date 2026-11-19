@@ -50,6 +50,13 @@
       "when": 1795102255338,
       "tag": "0006_security_fixes_wardrobe_digest",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1795104791374,
+      "tag": "0007_member_photos_child_memories",
+      "breakpoints": true
     }
   ]
 }

@@ -309,6 +309,7 @@ export type Database = {
           id: string
           interface: string
           must_change_password: boolean
+          photo_path: string | null
           points: number
           sex: string
           sort: number
@@ -326,6 +327,7 @@ export type Database = {
           id?: string
           interface?: string
           must_change_password?: boolean
+          photo_path?: string | null
           points?: number
           sex?: string
           sort?: number
@@ -343,6 +345,7 @@ export type Database = {
           id?: string
           interface?: string
           must_change_password?: boolean
+          photo_path?: string | null
           points?: number
           sex?: string
           sort?: number
@@ -354,6 +357,7 @@ export type Database = {
       memories: {
         Row: {
           created_at: string
+          created_by: string | null
           day: string
           description: string | null
           favorite: boolean
@@ -365,6 +369,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
           day?: string
           description?: string | null
           favorite?: boolean
@@ -376,6 +381,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          created_by?: string | null
           day?: string
           description?: string | null
           favorite?: boolean

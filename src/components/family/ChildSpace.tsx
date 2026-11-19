@@ -80,7 +80,7 @@ export function ChildSpace({ member, asParent = false }: { member: Member; asPar
     <div className="stagger mx-auto max-w-4xl space-y-6">
       <section className="relative overflow-hidden rounded-3xl p-6 text-foreground shadow-soft" style={{ background: `color-mix(in oklab, ${member.color} 35%, var(--card))` }}>
         <div className="flex items-center gap-4">
-          <span className={cn("flex items-center justify-center rounded-full bg-card", v.huge ? "size-24 text-6xl" : "size-16 text-4xl")}>{member.avatar}</span>
+          {(member as { photo_url?: string }).photo_url ? <img src={(member as { photo_url?: string }).photo_url} alt={member.first_name} className={cn("shrink-0 rounded-full object-cover ring-4 ring-card", v.huge ? "size-24" : "size-16")} /> : <span className={cn("flex items-center justify-center rounded-full bg-card", v.huge ? "size-24 text-6xl" : "size-16 text-4xl")}>{member.avatar}</span>}
           <div className="flex-1">
             <h1 className={cn("font-bold", v.huge ? "text-4xl" : "text-3xl")}>{v.hello} {member.first_name} !</h1>
             <p className="text-sm font-semibold opacity-80">{asParent ? `${ageFrom(member.birth_date)} ans · ` : ""}{format(now, "EEEE d MMMM", { locale: fr })}</p>

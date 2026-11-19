@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { Plus } from "lucide-react";
+import { Camera, ImagePlus, Plus, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { membersQuery, useMe, type Member } from "@/hooks/use-me";
@@ -49,9 +49,21 @@ function MemberCard({ m, isSelf }: { m: Member; isSelf: boolean }) {
   async function run(p: Promise<unknown>, ok: string) {
     try { await p; toast.success(ok); refresh(); } catch (e) { toast.error(e instanceof Error ? e.message : "Erreur"); }
   }
-  async function patch(v: Partial<Member>) {
+  async function patch(v: Partial<Omit<Member, "photo_url">>) {
     const { error } = await supabase.from("members").update(v).eq("id", m.id);
     if (error) toast.error(error.message); else refresh();
+  }
+  async function uploadPhoto(file: File) {
+    if (!file.type.startsWith("image/")) { toast.error("Choisis une image"); return; }
+    if (file.size > 5 * 1024 * 1024) { toast.error("Image trop lourde (5 Mo max)"); return; }
+    const ext = file.name.split(".").pop()?.toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    const path = `${m.id}/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { contentType: file.type });
+    if (error) { toast.error(error.message); return; }
+    if (m.photo_path) await supabase.storage.from("avatars").remove([m.photo_path]);
+    await patch({ photo_path: path });
+    qc.invalidateQueries({ queryKey: ["me"] });
+    toast.success("Photo mise à jour 📸");
   }
   return (
     <div className="card-modern p-5">
@@ -74,6 +86,14 @@ function MemberCard({ m, isSelf }: { m: Member; isSelf: boolean }) {
       <div className="mt-3 flex items-center gap-2">
         <Input className="w-16" defaultValue={m.avatar} maxLength={4} onBlur={(e) => e.target.value && e.target.value !== m.avatar && patch({ avatar: e.target.value })} aria-label="Avatar" />
         <div className="flex flex-wrap gap-1">{COLORS.map((c) => <button key={c} onClick={() => patch({ color: c })} aria-label={`Couleur ${c}`} className="size-6 rounded-full ring-offset-2 ring-offset-card" style={{ background: c, boxShadow: m.color === c ? "0 0 0 2px var(--foreground)" : undefined }} />)}</div>
+      </div>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="text-xs font-bold text-muted-foreground">Photo de profil :</span>
+        <label className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-xs font-bold"><Camera className="size-4" /> Prendre
+          <input type="file" accept="image/*" capture="user" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadPhoto(f); e.target.value = ""; }} /></label>
+        <label className="inline-flex cursor-pointer items-center gap-1 rounded-full bg-secondary px-3 py-1.5 text-xs font-bold"><ImagePlus className="size-4" /> Importer
+          <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadPhoto(f); e.target.value = ""; }} /></label>
+        {m.photo_path && <button className="inline-flex items-center gap-1 text-xs font-bold text-destructive" onClick={async () => { await supabase.storage.from("avatars").remove([m.photo_path!]); await patch({ photo_path: null }); qc.invalidateQueries({ queryKey: ["me"] }); }}><X className="size-3" /> Remettre l'icône</button>}
       </div>
       {interfaceForAge(age) !== m.interface && !isSelf && <p className="mt-2 text-xs text-muted-foreground">Suggestion selon l'âge : {INTERFACE_LABELS[interfaceForAge(age)]}</p>}
       {!isSelf && (
