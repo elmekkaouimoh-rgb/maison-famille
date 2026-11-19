@@ -59,7 +59,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="card-modern flex h-full flex-col p-4">
         <div className="mb-8 flex items-center gap-2 px-2">
           <img src={logo} alt="" width={40} height={40} className="size-10" />
-          <span className="brand-title flex-1 font-display text-lg font-bold leading-tight">EL MEKKAOUI</span>
+          <span className="brand-title flex-1 whitespace-nowrap font-display text-base font-bold leading-tight">EL MEKKAOUI</span>
           <NotificationBell />
         </div>
         <nav className="flex flex-1 flex-col gap-1">
