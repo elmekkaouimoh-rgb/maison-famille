@@ -28,3 +28,5 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Family OS: logins use username→synthetic email (lib/family.ts); account admin ops live in src/lib/accounts.functions.ts behind has_role admin; privileges come from user_roles, members.family_role is display only.
