@@ -63,14 +63,14 @@ function MemberCard({ m, isSelf }: { m: Member; isSelf: boolean }) {
         </div>
         {m.user_id ? <Badge variant={m.active ? "secondary" : "destructive"}>{m.active ? `@${m.username}` : "Désactivé"}</Badge> : <Badge variant="outline">Sans compte</Badge>}
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-2">
+      {!isSelf && <div className="mt-4 grid grid-cols-2 gap-2">
         <div><Label className="text-xs">Interface</Label>
           <Select value={m.interface} onValueChange={(v) => patch({ interface: v })} disabled={isSelf}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{Object.entries(INTERFACE_LABELS).filter(([k]) => k !== "admin").map(([k, l]) => <SelectItem key={k} value={k}>{l}</SelectItem>)}</SelectContent></Select></div>
         <div><Label className="text-xs">Rôle</Label>
           <Select value={m.family_role} onValueChange={(v) => run(fns.role({ data: { memberId: m.id, role: v as (typeof ROLES)[number] } }), "Rôle modifié")} disabled={isSelf}><SelectTrigger><SelectValue /></SelectTrigger>
             <SelectContent>{isSelf && <SelectItem value="admin">{ROLE_LABELS["admin"]}</SelectItem>}{ROLES.map((r) => <SelectItem key={r} value={r}>{ROLE_LABELS[r]}</SelectItem>)}</SelectContent></Select></div>
-      </div>
+      </div>}
       <div className="mt-3 flex items-center gap-2">
         <Input className="w-16" defaultValue={m.avatar} maxLength={4} onBlur={(e) => e.target.value && e.target.value !== m.avatar && patch({ avatar: e.target.value })} aria-label="Avatar" />
         <div className="flex flex-wrap gap-1">{COLORS.map((c) => <button key={c} onClick={() => patch({ color: c })} aria-label={`Couleur ${c}`} className="size-6 rounded-full ring-offset-2 ring-offset-card" style={{ background: c, boxShadow: m.color === c ? "0 0 0 2px var(--foreground)" : undefined }} />)}</div>
