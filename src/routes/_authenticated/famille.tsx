@@ -17,7 +17,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/famille")({
-  head: () => ({ meta: [{ title: "Famille & comptes — Family OS" }, { name: "description", content: "Gestion des membres et des comptes." }] }),
+  head: () => ({ meta: [{ title: "Famille & comptes — EL MEKKAOUI" }, { name: "description", content: "Gestion des membres et des comptes." }] }),
   component: FamilyPage,
 });
 

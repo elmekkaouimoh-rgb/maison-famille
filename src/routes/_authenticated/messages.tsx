@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/messages")({
-  head: () => ({ meta: [{ title: "Messagerie — Family OS" }, { name: "description", content: "Conversations privées de la famille." }] }),
+  head: () => ({ meta: [{ title: "Messagerie — EL MEKKAOUI" }, { name: "description", content: "Conversations privées de la famille." }] }),
   component: MessagesPage,
 });
 

@@ -16,7 +16,7 @@ import { Avatar } from "@/components/family/AppShell";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/budget")({
-  head: () => ({ meta: [{ title: "Budget familial — Family OS" }, { name: "description", content: "Revenus, dépenses et suivi du budget." }] }),
+  head: () => ({ meta: [{ title: "Budget familial — EL MEKKAOUI" }, { name: "description", content: "Revenus, dépenses et suivi du budget." }] }),
   component: BudgetPage,
 });
 

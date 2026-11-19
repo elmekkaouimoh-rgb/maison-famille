@@ -14,9 +14,9 @@ export const Route = createFileRoute("/auth")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Connexion — Family OS" },
+      { title: "Connexion — EL MEKKAOUI" },
       { name: "description", content: "Connectez-vous à l'espace privé de la famille." },
-      { property: "og:title", content: "Connexion — Family OS" },
+      { property: "og:title", content: "Connexion — EL MEKKAOUI" },
       { property: "og:description", content: "Espace familial privé." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -56,7 +56,7 @@ function AuthPage() {
       <div className="w-full max-w-sm rounded-3xl bg-card p-8 shadow-soft">
         <div className="mb-6 text-center">
           <div className="text-5xl">🏡</div>
-          <h1 className="mt-2 text-3xl font-bold text-foreground">Family OS</h1>
+          <h1 className="mt-2 text-3xl font-bold text-foreground">EL MEKKAOUI</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {isSetup ? "Première ouverture : créez le compte de Saïd, administrateur principal." : "Connectez-vous avec votre identifiant."}
           </p>

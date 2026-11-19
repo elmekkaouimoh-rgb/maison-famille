@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/souvenirs")({
-  head: () => ({ meta: [{ title: "Souvenirs — Family OS" }, { name: "description", content: "Le coffre-fort des photos, vidéos et moments de la famille." }] }),
+  head: () => ({ meta: [{ title: "Souvenirs — EL MEKKAOUI" }, { name: "description", content: "Le coffre-fort des photos, vidéos et moments de la famille." }] }),
   component: MemoriesPage,
 });
 

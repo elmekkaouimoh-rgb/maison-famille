@@ -226,3 +226,46 @@
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 @keyframes wiggle { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(14deg); } 30% { transform: rotate(-12deg); } 45% { transform: rotate(6deg); } 60% { transform: rotate(0); } }
+
+/* ===== EL MEKKAOUI look ===== */
+:root {
+  --pastel-violet: oklch(0.93 0.05 300);
+  --pastel-violet-fg: oklch(0.48 0.2 295);
+  --pastel-green: oklch(0.94 0.06 155);
+  --pastel-green-fg: oklch(0.5 0.15 150);
+  --pastel-orange: oklch(0.94 0.06 65);
+  --pastel-orange-fg: oklch(0.58 0.16 50);
+  --pastel-pink: oklch(0.94 0.05 350);
+  --pastel-pink-fg: oklch(0.56 0.2 355);
+  --brand-blue: oklch(0.58 0.2 258);
+  --brand-blue-deep: oklch(0.48 0.22 262);
+  --app-bg: radial-gradient(1200px 600px at 10% -10%, oklch(0.93 0.04 250), transparent 60%), radial-gradient(900px 600px at 110% 30%, oklch(0.94 0.04 300), transparent 60%), oklch(0.97 0.015 255);
+}
+@theme inline {
+  --color-pastel-violet: var(--pastel-violet);
+  --color-pastel-violet-fg: var(--pastel-violet-fg);
+  --color-pastel-green: var(--pastel-green);
+  --color-pastel-green-fg: var(--pastel-green-fg);
+  --color-pastel-orange: var(--pastel-orange);
+  --color-pastel-orange-fg: var(--pastel-orange-fg);
+  --color-pastel-pink: var(--pastel-pink);
+  --color-pastel-pink-fg: var(--pastel-pink-fg);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-deep: var(--brand-blue-deep);
+}
+body { background: var(--app-bg); background-attachment: fixed; }
+@utility glass {
+  border-radius: 1.75rem;
+  background: color-mix(in oklab, var(--card) 72%, transparent);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--card) 85%, transparent);
+  box-shadow: 0 1px 0 0 color-mix(in oklab, white 80%, transparent) inset, 0 14px 36px -20px oklch(0.5 0.15 260 / 0.35);
+}
+@utility fab {
+  background: linear-gradient(160deg, var(--brand-blue), var(--brand-blue-deep));
+  box-shadow: 0 12px 24px -8px oklch(0.5 0.2 260 / 0.6), 0 0 0 6px color-mix(in oklab, var(--card) 80%, transparent);
+}
+@utility brand-title {
+  background-image: linear-gradient(120deg, oklch(0.28 0.12 265), oklch(0.42 0.2 270));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}

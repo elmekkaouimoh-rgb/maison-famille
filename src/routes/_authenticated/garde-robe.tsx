@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/garde-robe")({
-  head: () => ({ meta: [{ title: "Garde-robe & tailles — Family OS" }, { name: "description", content: "Tailles des enfants, vêtements à renouveler et affaires à transmettre." }] }),
+  head: () => ({ meta: [{ title: "Garde-robe & tailles — EL MEKKAOUI" }, { name: "description", content: "Tailles des enfants, vêtements à renouveler et affaires à transmettre." }] }),
   component: WardrobePage,
 });
 

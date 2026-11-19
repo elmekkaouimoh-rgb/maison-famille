@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/_authenticated/taches")({
-  head: () => ({ meta: [{ title: "Tâches — Family OS" }, { name: "description", content: "Tâches, missions et validations." }] }),
+  head: () => ({ meta: [{ title: "Tâches — EL MEKKAOUI" }, { name: "description", content: "Tâches, missions et validations." }] }),
   component: TasksPage,
 });
 

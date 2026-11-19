@@ -5,9 +5,9 @@ export const Route = createFileRoute("/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Family OS — l'organisation de la famille" },
+      { title: "EL MEKKAOUI — l'organisation de la famille" },
       { name: "description", content: "Calendrier, tâches, routines et récompenses de toute la famille en un seul endroit." },
-      { property: "og:title", content: "Family OS — l'organisation de la famille" },
+      { property: "og:title", content: "EL MEKKAOUI — l'organisation de la famille" },
       { property: "og:description", content: "Calendrier, tâches, routines et récompenses de toute la famille." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

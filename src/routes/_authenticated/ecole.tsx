@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/ecole")({
-  head: () => ({ meta: [{ title: "Scolarité — Family OS" }, { name: "description", content: "Devoirs, contrôles, notes et progrès scolaires." }] }),
+  head: () => ({ meta: [{ title: "Scolarité — EL MEKKAOUI" }, { name: "description", content: "Devoirs, contrôles, notes et progrès scolaires." }] }),
   component: SchoolPage,
 });
 

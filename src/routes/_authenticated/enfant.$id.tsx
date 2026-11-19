@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ChildSpace } from "@/components/family/ChildSpace";
 
 export const Route = createFileRoute("/_authenticated/enfant/$id")({
-  head: () => ({ meta: [{ title: "Espace enfant — Family OS" }, { name: "description", content: "Espace personnel d'un enfant." }] }),
+  head: () => ({ meta: [{ title: "Espace enfant — EL MEKKAOUI" }, { name: "description", content: "Espace personnel d'un enfant." }] }),
   component: ChildPage,
 });
 

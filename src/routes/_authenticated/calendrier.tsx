@@ -19,7 +19,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/calendrier")({
-  head: () => ({ meta: [{ title: "Calendrier familial — Family OS" }, { name: "description", content: "Rendez-vous, école, activités et anniversaires." }] }),
+  head: () => ({ meta: [{ title: "Calendrier familial — EL MEKKAOUI" }, { name: "description", content: "Rendez-vous, école, activités et anniversaires." }] }),
   component: CalendarPage,
 });
 
@@ -29,7 +29,7 @@ function CalendarPage() {
   const { data: me } = useMe();
   const { data: members = [] } = useQuery(membersQuery);
   const { data: events = [] } = useQuery({ queryKey: ["events"], queryFn: async () => (await supabase.from("events").select("*")).data ?? [] });
-  const [view, setView] = useState<View>("mois");
+  const [view, setView] = useState<View>("semaine");
   const [cursor, setCursor] = useState(new Date());
   const [selected, setSelected] = useState(new Date());
   const byId = Object.fromEntries(members.map((m) => [m.id, m]));
@@ -50,7 +50,7 @@ function CalendarPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-4">
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="flex-1 text-3xl font-bold capitalize">{title}</h1>
+        <div className="flex-1"><h1 className="text-2xl font-bold">Calendrier Familial</h1><p className="text-sm font-semibold capitalize text-muted-foreground">{title}</p></div>
         <Tabs value={view} onValueChange={(v) => setView(v as View)}>
           <TabsList><TabsTrigger value="jour">Jour</TabsTrigger><TabsTrigger value="semaine">Semaine</TabsTrigger><TabsTrigger value="mois">Mois</TabsTrigger></TabsList>
         </Tabs>
@@ -63,7 +63,7 @@ function CalendarPage() {
       </div>
 
       {view === "mois" && (
-        <div className="card-modern p-3">
+        <div className="glass p-3">
           <div className="grid grid-cols-7 text-center text-xs font-bold text-muted-foreground">
             {["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"].map((d) => <div key={d} className="py-2">{d}</div>)}
           </div>
@@ -86,27 +86,52 @@ function CalendarPage() {
       )}
 
       {view === "semaine" && (
-        <div className="grid gap-3 md:grid-cols-7">
-          {days.map((d) => (
-            <div key={d.toISOString()} className={cn("card-modern p-3", isSameDay(d, new Date()) && "ring-2 ring-primary")}>
-              <div className="mb-2 text-sm font-bold capitalize">{format(d, "EEE dd/MM", { locale: fr })}</div>
-              <div className="space-y-2">{occ.filter((e) => isSameDay(e.occ, d)).map((e) => <EventCard key={e.id + e.occ.toISOString()} e={e} byId={byId} />)}</div>
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-7 gap-1.5">
+            {days.map((d) => {
+              const evs = occ.filter((e) => isSameDay(e.occ, d));
+              const sel = isSameDay(d, selected);
+              return (
+                <button key={d.toISOString()} onClick={() => setSelected(d)} className={cn("glass flex flex-col items-center rounded-2xl py-2 transition", sel && "fab scale-105 text-primary-foreground")}>
+                  <span className="text-xs font-bold capitalize">{format(d, "EEE", { locale: fr }).replace(".", "")}</span>
+                  <span className="text-xl font-extrabold">{format(d, "d")}</span>
+                  <span className="flex h-2 gap-0.5">{evs.slice(0, 3).map((e, i) => <span key={i} className="size-1.5 rounded-full" style={{ background: sel ? "var(--primary-foreground)" : byId[e.member_ids[0] ?? ""]?.color ?? "var(--primary)" }} />)}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="space-y-3">
+            {!occ.filter((e) => isSameDay(e.occ, selected)).length && <p className="glass p-4 text-sm text-muted-foreground">Aucun événement ce jour-là.</p>}
+            {occ.filter((e) => isSameDay(e.occ, selected)).map((e) => {
+              const m = byId[e.member_ids[0] ?? ""];
+              const c = m?.color ?? "var(--primary)";
+              return (
+                <div key={e.id + e.occ.toISOString()} className="glass flex items-center gap-3 overflow-hidden p-0" style={{ background: `linear-gradient(90deg, color-mix(in oklab, ${c} 22%, var(--card)), var(--card) 45%)` }}>
+                  <div className="w-16 shrink-0 py-4 pl-4 text-sm font-bold leading-tight">{e.all_day ? "Journée" : fmtTime(e.occ)}</div>
+                  <span className="text-3xl">{EVENT_CATEGORIES[e.category]?.icon}</span>
+                  <div className="min-w-0 flex-1 py-3">
+                    <div className="truncate font-bold">{e.title}{m ? ` – ${m.first_name}` : ""}</div>
+                    <span className="mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-bold" style={{ background: `color-mix(in oklab, ${c} 25%, transparent)` }}>{EVENT_CATEGORIES[e.category]?.label}</span>
+                  </div>
+                  {m && <div className="mr-4 rounded-full p-[3px]" style={{ background: c }}><Avatar m={m} size={44} /></div>}
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
-      <section className="card-modern p-5">
+      {view !== "semaine" && <section className="glass p-5">
         <h2 className="mb-3 text-lg font-bold capitalize">{format(view === "mois" ? selected : cursor, "EEEE dd/MM/yyyy", { locale: fr })}</h2>
         {view !== "semaine" && (!dayList.length ? <p className="text-sm text-muted-foreground">Aucun événement.</p> : <div className="grid gap-2 sm:grid-cols-2">{dayList.map((e) => <EventCard key={e.id + e.occ.toISOString()} e={e} byId={byId} canDelete={me?.isManager} />)}</div>)}
-      </section>
+      </section>}
     </div>
   );
 }
 
 function EventCard({ e, byId, canDelete }: { e: any; byId: Record<string, any>; canDelete?: boolean | undefined }) {
   const qc = useQueryClient();
-  const color = byId[e.member_ids[0]]?.color ?? "var(--primary)";
+  const color = byId[e.member_ids[0] ?? ""]?.color ?? "var(--primary)";
   return (
     <div className="rounded-2xl border-l-4 bg-muted p-3" style={{ borderColor: color }}>
       <div className="flex items-start gap-2">

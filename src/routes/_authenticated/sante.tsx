@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/sante")({
-  head: () => ({ meta: [{ title: "Santé — Family OS" }, { name: "description", content: "Fiches médicales privées des enfants." }] }),
+  head: () => ({ meta: [{ title: "Santé — EL MEKKAOUI" }, { name: "description", content: "Fiches médicales privées des enfants." }] }),
   component: HealthPage,
 });
 

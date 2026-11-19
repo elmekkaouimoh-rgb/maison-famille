@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/recompenses")({
-  head: () => ({ meta: [{ title: "Récompenses — Family OS" }, { name: "description", content: "Points, étoiles et récompenses." }] }),
+  head: () => ({ meta: [{ title: "Récompenses — EL MEKKAOUI" }, { name: "description", content: "Points, étoiles et récompenses." }] }),
   component: RewardsPage,
 });
 

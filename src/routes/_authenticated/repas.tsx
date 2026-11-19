@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { guessCategory, SHOP_CATEGORIES } from "@/lib/meals";
 
 export const Route = createFileRoute("/_authenticated/repas")({
-  head: () => ({ meta: [{ title: "Repas & courses — Family OS" }, { name: "description", content: "Menu de la semaine et liste de courses." }] }),
+  head: () => ({ meta: [{ title: "Repas & courses — EL MEKKAOUI" }, { name: "description", content: "Menu de la semaine et liste de courses." }] }),
   component: MealsPage,
 });
 
