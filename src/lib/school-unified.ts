@@ -36,3 +36,27 @@ export function subjectTone(subject: string | null) {
   let h = 0; for (const c of norm(subject)) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   return TONES[h % TONES.length]!;
 }
+
+/** Cancellation status read from the source text, never guessed. */
+export function courseStatus(e: { kind: string; title: string; raw?: any }) {
+  const s = `${e.raw?.source_status ?? ""} ${e.kind === "changement_horaire" ? e.title : ""}`.toLowerCase();
+  if (/annul/.test(s)) return "Cours annulé";
+  if (/prof[^ ]* *absent|absence (du |de la )?prof|professeur absent/.test(s)) return "Professeur absent";
+  return null;
+}
+type WithKind = SchoolEntry & { merged?: SchoolEntry[]; status?: string | null };
+/** Visually merges a course and a schedule change on the same day, start, end and room. Nothing is deleted. */
+export function mergeCourses(entries: SchoolEntry[]): WithKind[] {
+  const key = (e: SchoolEntry) => `${entryDay(e)}|${e.starts_at ?? ""}|${e.ends_at ?? ""}|${(e.location ?? "").toLowerCase()}`;
+  const changes = entries.filter((e) => e.kind === "changement_horaire" && e.starts_at);
+  const used = new Set<string>();
+  const out: WithKind[] = [];
+  for (const e of entries) {
+    if (e.kind !== "cours") continue;
+    const c = changes.find((x) => !used.has(x.id) && key(x) === key(e) && courseStatus(x));
+    if (c) used.add(c.id);
+    out.push({ ...e, merged: c ? [e, c] : [e], status: courseStatus(e) ?? (c ? courseStatus(c) : null) });
+  }
+  for (const e of entries) if (e.kind !== "cours" && !used.has(e.id)) out.push({ ...e, merged: [e], status: e.kind === "changement_horaire" ? courseStatus(e) : null });
+  return out.sort((a, b) => (a.starts_at ?? "~").localeCompare(b.starts_at ?? "~"));
+}

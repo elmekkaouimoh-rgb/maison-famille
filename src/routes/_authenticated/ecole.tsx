@@ -9,8 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { membersQuery, useMe, type Member } from "@/hooks/use-me";
 import { MemberTabs } from "@/components/family/MemberPicker";
 import { SCHOOL_KINDS } from "@/lib/school";
-import { gradeLabel, homeworkStatus, groupHomework } from "@/lib/veille";
-import { entryDay, subjectTone, unifySchool, type SchoolEntry } from "@/lib/school-unified";
+import { frNum, gradeLabel, homeworkStatus, groupHomework } from "@/lib/veille";
+import { entryDay, mergeCourses, subjectTone, unifySchool, type SchoolEntry } from "@/lib/school-unified";
 import { CollectDetails, UpdateLine, useVeilleItems } from "@/components/family/VeilleList";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,8 +66,7 @@ function SchoolPage() {
   const tomorrow = iso(addDays(new Date(), 1));
   const prep = all.filter((e) => (e.kind === "devoir" || e.kind === "controle") && entryDay(e) === tomorrow);
   const week = Array.from({ length: 7 }, (_, i) => iso(addDays(new Date(), i)));
-  const ofDay = all.filter((e) => entryDay(e) === day && ["cours", "changement_horaire", "devoir", "controle", "evenement"].includes(e.kind))
-    .sort((a, b) => (a.starts_at ?? "~").localeCompare(b.starts_at ?? "~"));
+  const ofDay = mergeCourses(all.filter((e) => entryDay(e) === day && ["cours", "changement_horaire", "devoir", "controle", "evenement"].includes(e.kind)));
   const by = (k: TabK) => all.filter((e) => (TABS.find((t) => t.k === k)!.kinds as readonly string[]).includes(e.kind));
   const p = data?.profile;
 
@@ -86,10 +85,10 @@ function SchoolPage() {
 
       {me?.isManager && (
         <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Stat label="Devoirs à venir" value={by("todo").filter((e) => (entryDay(e) ?? "") >= today).length} />
-          <Stat label="Contrôles à venir" value={by("tests").filter((e) => (entryDay(e) ?? "") >= today).length} />
-          <Stat label="Notes" value={all.filter((e) => e.kind === "note").length} />
-          <Stat label="Absences · retards" value={`${all.filter((e) => e.kind === "absence").length} · ${all.filter((e) => e.kind === "retard").length}`} />
+          <Stat label="Devoirs à venir" known={by("todo").length > 0} value={by("todo").filter((e) => (entryDay(e) ?? "") >= today).length} />
+          <Stat label="Contrôles à venir" known={by("tests").length > 0} value={by("tests").filter((e) => (entryDay(e) ?? "") >= today).length} />
+          <Stat label="Notes" known={all.some((e) => e.kind === "note")} value={all.filter((e) => e.kind === "note").length} />
+          <Stat label="Absences · retards" known={all.some((e) => e.kind === "absence" || e.kind === "retard")} value={`${all.some((e) => e.kind === "absence") ? all.filter((e) => e.kind === "absence").length : "—"} · ${all.some((e) => e.kind === "retard") ? all.filter((e) => e.kind === "retard").length : "—"}`} />
         </section>
       )}
 
@@ -117,7 +116,7 @@ function SchoolPage() {
           })}
         </div>
         <div className="mt-4 space-y-2">
-          {ofDay.length ? ofDay.map((e) => e.kind === "cours" || e.kind === "changement_horaire" ? <CourseRow key={e.id} e={e} /> : <EntryCard key={e.id} e={e} onToggle={refresh} />)
+          {ofDay.length ? ofDay.map((e) => e.kind === "cours" || e.kind === "changement_horaire" ? <CourseRow key={e.id} e={e} isAdmin={!!me?.isAdmin} /> : <EntryCard key={e.id} e={e} onToggle={refresh} />)
             : <p className="text-sm text-muted-foreground">Rien d'enregistré ce jour-là.</p>}
         </div>
       </section>
@@ -134,8 +133,8 @@ function SchoolPage() {
         })}
       </nav>
 
-      <section className="school-card p-4 sm:p-5">
-        <TabBody k={tab} items={by(tab)} today={today} onToggle={refresh} />
+      <section id="ecole-onglet" className="school-card p-4 sm:p-5">
+        <TabBody k={tab} items={by(tab)} today={today} onToggle={refresh} isAdmin={!!me?.isAdmin} />
         <CollectDetails items={imported.filter((i: any) => (TABS.find((t) => t.k === tab)!.kinds as readonly string[]).includes(i.category))} />
       </section>
 
@@ -148,22 +147,29 @@ function Avatar({ m }: { m: Member }) {
   return m.photo_url ? <img src={m.photo_url} alt="" className="size-16 shrink-0 rounded-3xl object-cover" />
     : <div className="grid size-16 shrink-0 place-items-center rounded-3xl text-3xl" style={{ background: `color-mix(in oklab, ${m.color} 30%, var(--card))` }}>{m.avatar}</div>;
 }
-function Stat({ label, value }: { label: string; value: number | string }) {
-  return <div className="school-card p-3"><div className="text-2xl font-extrabold">{value}</div><div className="text-xs font-semibold text-muted-foreground">{label}</div></div>;
+function Stat({ label, value, known = true }: { label: string; value: number | string; known?: boolean }) {
+  return <div className="school-card p-3"><div className={known ? "text-2xl font-extrabold" : "py-1 text-sm font-bold text-muted-foreground"}>{known ? value : "Pas encore importé"}</div><div className="text-xs font-semibold text-muted-foreground">{label}</div></div>;
 }
 function SubjectPill({ s }: { s: string | null }) {
   if (!s) return null;
   return <span className={cn("inline-block max-w-full truncate rounded-full px-2.5 py-0.5 text-xs font-bold", TONE[subjectTone(s)])}>{s}</span>;
 }
-function CourseRow({ e }: { e: SchoolEntry }) {
+function CourseRow({ e, isAdmin }: { e: SchoolEntry & { merged?: SchoolEntry[]; status?: string | null }; isAdmin: boolean }) {
+  const off = !!e.status;
   return (
-    <div className="flex min-w-0 items-center gap-3 rounded-2xl bg-muted/50 p-3">
-      <div className="w-14 shrink-0 text-center"><div className="text-sm font-extrabold">{hm(e.starts_at) ?? "—"}</div>{e.ends_at && <div className="text-xs text-muted-foreground">{hm(e.ends_at)}</div>}</div>
-      <div className="min-w-0 flex-1">
-        <SubjectPill s={e.subject} />
-        <div className="font-bold">{e.title}</div>
-        <div className="text-xs text-muted-foreground">{[e.kind === "changement_horaire" && "Changement d'horaire", e.location && `Salle ${e.location}`].filter(Boolean).join(" · ")}</div>
+    <div className={cn("rounded-2xl p-3", off ? "border-2 border-dashed border-border bg-card" : "bg-muted/50")}>
+      <div className="flex min-w-0 items-center gap-3">
+        <div className={cn("w-14 shrink-0 text-center", off && "text-muted-foreground")}><div className="text-sm font-extrabold">{hm(e.starts_at) ?? "—"}</div>{e.ends_at && <div className="text-xs text-muted-foreground">{hm(e.ends_at)}</div>}</div>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2"><SubjectPill s={e.subject} />{off && <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-bold text-foreground">{e.status}</span>}</div>
+          <div className={cn("font-bold", off && "text-muted-foreground line-through")}>{e.kind === "changement_horaire" && !off ? `Changement : ${e.title}` : e.title}</div>
+          <div className="text-xs text-muted-foreground">{[e.kind === "changement_horaire" && !off && "Changement d'horaire", e.location && `Salle ${e.location}`].filter(Boolean).join(" · ")}</div>
+        </div>
       </div>
+      {isAdmin && (e.merged?.length ?? 0) > 1 && (
+        <details className="mt-2 text-xs text-muted-foreground"><summary className="flex min-h-11 cursor-pointer items-center font-bold">Sources regroupées ({e.merged!.length})</summary>
+          {e.merged!.map((m) => <div key={m.id}>{m.kind === "cours" ? "Cours" : "Changement d'horaire"} · {m.title}{m.raw?.source_status ? ` · statut : ${m.raw.source_status}` : ""}</div>)}</details>
+      )}
     </div>
   );
 }
@@ -196,7 +202,7 @@ function EntryCard({ e, open, onToggle }: { e: SchoolEntry; open?: boolean; onTo
 const Empty = () => <p className="rounded-2xl bg-muted/60 p-5 text-center text-sm text-muted-foreground">Pas encore importé</p>;
 const Group = ({ t, children }: { t: string; children: React.ReactNode }) => <div className="space-y-2"><h3 className="pt-2 text-sm font-extrabold text-muted-foreground">{t}</h3>{children}</div>;
 
-function TabBody({ k, items, today, onToggle }: { k: TabK; items: SchoolEntry[]; today: string; onToggle: () => void }) {
+function TabBody({ k, items, today, onToggle, isAdmin }: { k: TabK; items: SchoolEntry[]; today: string; onToggle: () => void; isAdmin: boolean }) {
   if (!items.length) return <Empty />;
   if (k === "todo" || k === "tests") {
     const g = groupHomework(items, today);
@@ -216,19 +222,19 @@ function TabBody({ k, items, today, onToggle }: { k: TabK; items: SchoolEntry[];
         <div className="min-w-0 flex-1">
           <SubjectPill s={e.subject} />
           <div className="mt-1 font-bold">{e.kind === "moyenne" ? `Moyenne · ${e.title}` : e.title}</div>
-          <div className="text-xs text-muted-foreground">{[entryDay(e) && longDate(entryDay(e)!), e.period, e.coefficient != null && `coef. ${e.coefficient}`, e.class_average != null && `moy. classe ${e.class_average}`].filter(Boolean).join(" · ")}</div>
+          <div className="text-xs text-muted-foreground">{[entryDay(e) && longDate(entryDay(e)!), e.period, e.coefficient != null && `coef. ${frNum(e.coefficient)}`, e.class_average != null && `moy. classe ${frNum(e.class_average)}`].filter(Boolean).join(" · ")}</div>
         </div>
         <div className="shrink-0 text-right"><div className="text-2xl font-extrabold tracking-tight text-electric">{gradeLabel(e)}</div></div>
       </div>))}</div>;
   }
   if (k === "edt") {
     const days = [...new Set(items.map((e) => entryDay(e) ?? ""))].sort();
-    return <div className="space-y-2">{days.map((d) => <Group key={d} t={d ? longDate(d) : "Sans date"}>{items.filter((e) => (entryDay(e) ?? "") === d).sort((a, b) => (a.starts_at ?? "").localeCompare(b.starts_at ?? "")).map((e) => <CourseRow key={e.id} e={e} />)}</Group>)}</div>;
+    return <div className="space-y-2">{days.map((d) => <Group key={d} t={d ? longDate(d) : "Sans date"}>{mergeCourses(items.filter((e) => (entryDay(e) ?? "") === d)).map((e) => <CourseRow key={e.id} e={e} isAdmin={isAdmin} />)}</Group>)}</div>;
   }
   if (k === "vie") {
     const n = (kind: string) => items.filter((e) => e.kind === kind).length;
     return <div className="space-y-3">
-      <div className="grid grid-cols-3 gap-2">{[["Absences", n("absence")], ["Retards", n("retard")], ["Observations", n("observation")]].map(([l, v]) => <div key={l} className="rounded-2xl bg-muted/60 p-3 text-center"><div className="text-xl font-extrabold">{v}</div><div className="text-xs font-semibold text-muted-foreground">{l}</div></div>)}</div>
+      <div className="grid grid-cols-3 gap-2">{([["Absences", n("absence")], ["Retards", n("retard")], ["Observations", n("observation")]] as const).map(([l, v]) => <div key={l} className="rounded-2xl bg-muted/60 p-3 text-center">{v ? <div className="text-xl font-extrabold">{v}</div> : <div className="py-1 text-xs font-bold text-muted-foreground">Pas encore importé</div>}<div className="text-xs font-semibold text-muted-foreground">{l}</div></div>)}</div>
       {[...items].reverse().map((e) => (
         <div key={e.id} className="rounded-2xl border border-border/60 p-4">
           <div className="flex items-center gap-2"><span className="flex-1 font-bold">{e.title}</span>{e.justified != null && <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-bold", e.justified ? "bg-pastel-green text-pastel-green-fg" : "bg-muted text-muted-foreground")}>{e.justified ? "Justifié" : "Non justifié"}</span>}</div>

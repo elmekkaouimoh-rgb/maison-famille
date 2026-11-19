@@ -33,7 +33,7 @@ describe("veille school display", () => {
   it("Abs and Non noté are never a zero", () => {
     expect(gradeLabel({ grade: null, out_of: 20, grade_raw: null, grade_status: "abs" })).toBe("Abs");
     expect(gradeLabel({ grade: null, out_of: 20, grade_raw: null, grade_status: "non_note" })).toBe("Non noté");
-    expect(gradeLabel({ grade: 14.5, out_of: 20, grade_raw: null, grade_status: "note" })).toBe("14.5/20");
+    expect(gradeLabel({ grade: 14.5, out_of: 20, grade_raw: null, grade_status: "note" })).toBe("14,5/20");
   });
   it("unchecked homework is not 'not done'", () => {
     expect(homeworkStatus("non_coche")).toBe("Pas encore coché");
@@ -45,3 +45,9 @@ describe("veille school display", () => {
     expect(r.errors).toHaveLength(0);
   });
 });
+describe("grade display", () => {
+  it("does not assume /20 when the scale is unknown", () => {
+    expect(gradeLabel({ grade: 7.5, out_of: null, grade_raw: null, grade_status: "note" })).toBe("7,5");
+  });
+});
+describe("grade raw", () => { it("keeps the source text when the scale is unknown", () => { expect(gradeLabel({ grade: 14.5, out_of: null, grade_raw: "14,50", grade_status: "note" })).toBe("14,50"); }); });

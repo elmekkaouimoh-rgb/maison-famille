@@ -99,10 +99,13 @@ export function groupHomework<T extends Dated>(items: T[], today: string) {
 export function gradeLabel(i: { grade: number | null; out_of: number | null; grade_raw: string | null; grade_status: string | null }) {
   if (i.grade_status === "abs") return "Abs";
   if (i.grade_status === "non_note") return "Non noté";
-  if (i.grade != null) return i.out_of != null ? `${i.grade}/${i.out_of}` : String(i.grade);
+  if (i.grade != null && i.out_of == null && i.grade_raw) return i.grade_raw;
+  if (i.grade != null) return i.out_of != null ? `${frNum(i.grade)}/${frNum(i.out_of)}` : frNum(i.grade);
   return i.grade_raw ?? "—";
 }
 /** Simple homework status; "non coché" is never shown as failed or not done. */
 export function homeworkStatus(done: string) {
   return done === "fait" ? "Fait" : done === "non_fait" ? "Non fait" : done === "non_coche" ? "Pas encore coché" : null;
 }
+/** French decimal comma, no rounding. */
+export const frNum = (n: number) => String(n).replace(".", ",");
